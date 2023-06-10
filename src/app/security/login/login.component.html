@@ -1,0 +1,21 @@
+<p>login works!</p>
+
+<mat-slide-toggle>Toggle me!</mat-slide-toggle>
+
+<form class="example-form" (ngSubmit)="login()" [formGroup]="formLogin">
+    <mat-form-field class="example-full-width">
+        <mat-label>Username</mat-label>
+        <mat-error>Name is required</mat-error>
+        <input matInput placeholder="Username" formControlName="username">
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+        <mat-label>Password</mat-label>
+        <mat-error>Password is required</mat-error>
+        <input type="password" matInput placeholder="Password" formControlName="password">
+    </mat-form-field>
+    <br>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!formLogin.valid">Submit</button>
+    <mat-label>{{error}}</mat-label>
+
+</form>
