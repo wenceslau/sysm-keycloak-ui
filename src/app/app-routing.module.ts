@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './main/home/home.component';
 import { LoginComponent } from './security/login/login.component';
 import { AuthorizerGuard } from './security/authorizer.guard';
+import { AccessDeniedComponent } from './main/access-denied/access-denied.component';
+import { PermissionComponent } from './account/permission/permission.component';
+import { UserComponent } from './account/user/user.component';
 
 const routes: Routes = [
   {
@@ -16,10 +19,27 @@ const routes: Routes = [
     canActivate: [AuthorizerGuard],
   },
   {
+    path: 'access-denied',
+    component: AccessDeniedComponent,
+    canActivate: [AuthorizerGuard],
+  },
+  {
     path: 'home',
     component: HomeComponent,
     canActivate: [AuthorizerGuard],
-    data: { roles: ['VIEWER_HOME'] }
+    data: { roles: ['ROLE_VIEW_USER', 'ROLE_CREATE_USER'] }
+  },
+  {
+    path: 'permission',
+    component: PermissionComponent,
+    canActivate: [AuthorizerGuard],
+    data: { roles: ['ROLE_VIEW_PERMISSION', 'ROLE_CREATE_PERMISSION'] }
+  },
+  {
+    path: 'user',
+    component: UserComponent,
+    canActivate: [AuthorizerGuard],
+    data: { roles: ['ROLE_VIEW_USER1', 'ROLE_CREATE_USER1'] }
   }
 ];
 

@@ -63,6 +63,7 @@ export class AuthorizerService {
 
   // Verifica se a permissao contem nos authorities do toekn
   hasPermission(permission: string) {
+    console.log(this.jwtPayload)
     if (this.jwtPayload)
       return this.jwtPayload && this.jwtPayload.authorities.includes(permission);
   }
