@@ -1,0 +1,26 @@
+.flex-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8%;
+}
+
+.content-credential-title {
+    color: #7b1fa2;
+    font-size: 1.5rem;
+}
+
+.content-error-message {
+    color: red;
+    font-size: 0.8rem;
+}
+
+.content-credential {
+    width: 17rem;
+    height: 18rem;
+    float: right;
+    text-align: center;
+    padding: 1.875rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 0.625rem;
+}
