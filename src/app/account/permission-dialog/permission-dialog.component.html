@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Permission</h2>
+<form class="example-form" (ngSubmit)="save()" [formGroup]="formInput">
+
+    <mat-dialog-content class="mat-typography">
+        <div class="content-credential">
+
+            <mat-form-field class="input-full-width">
+                <mat-label>UUID</mat-label>
+                <input matInput disabled  [value]="formInput.value.uuid">
+            </mat-form-field>
+
+            <br>
+            <mat-form-field class="input-full-width">
+                <mat-label>Role</mat-label>
+                <mat-error>Role is required</mat-error>
+                <input matInput placeholder="" formControlName="role">
+            </mat-form-field>
+            <br>
+            <mat-form-field class="input-full-width">
+                <mat-label>Description</mat-label>
+                <mat-error>Description is required</mat-error>
+                <input matInput placeholder="" formControlName="description">
+            </mat-form-field>
+            <br>
+        </div>
+
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Cancel</button>
+        <button mat-button cdkFocusInitial type="submit">Save</button>
+    </mat-dialog-actions>
+</form>

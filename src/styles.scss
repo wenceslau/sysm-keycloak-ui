@@ -2,19 +2,30 @@
 
 html,
 body {
-    height: 95%;
+    height: 96%;
 }
 
 body {
-    margin: 10px;
-    padding-top: 20px;
-    padding-right: 100px;
-    padding-left: 100px;
+    margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.body-pages {
+    padding-top: 20px;
+    padding-left: 100px;
+    padding-right: 100px;
 }
 
 .content-center {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.column-uuid {
+    width: 20%;
+}
+
+.column-action {
+    width: 5%;
 }

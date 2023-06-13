@@ -1,1 +1,74 @@
-<p>permission works!</p>
+<div class="body-pages">
+
+  <div class="header-1" id="myHeader">
+
+    <div class="header-2">
+      <mat-toolbar color="">
+        <button mat-icon-button (click)="openDialog('')">
+          <mat-icon>library_add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="reset()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+
+        <span class="sml-spacer"></span>
+
+        <mat-form-field style="margin-top: 20px;">
+          <mat-label>Filter By</mat-label>
+          <mat-select [(ngModel)]="selectedValue" name="column">
+            <mat-option *ngFor="let column of displayedColumns" [value]="column">
+              {{column}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <span class="sml-spacer"></span>
+
+        <mat-form-field style="margin-top: 20px; width: 400px;">
+          <input matInput placeholder="...write something" (keydown.enter)="getData(0,pageSize)"
+            [(ngModel)]="valueFilter">
+        </mat-form-field>
+      </mat-toolbar>
+    </div>
+
+  </div>
+
+  <div class="container-permission">
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="actions">
+          <th class="column-action" mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element ">
+            <button mat-icon-button color="accent"(click)="openDialog(element.uuid)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th class="column-uuid" mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let element"> {{element.uuid}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef> Role </th>
+          <td mat-cell *matCellDef="let element"> {{element.role}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator showFirstLastButtons [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+        (page)="loadData($event)">
+      </mat-paginator>
+    </div>
+  </div>
+
+</div>

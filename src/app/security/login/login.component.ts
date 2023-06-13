@@ -20,13 +20,13 @@ export class LoginComponent implements OnInit {
     private auth: AuthorizerService,
     private formBuild: FormBuilder) {
 
-      this.formLogin = this.formBuild.group({
-        username: [null, [Validators.required]],
-        password: [null, [Validators.required]],
-      });
+    this.formLogin = this.formBuild.group({
+      username: [null, [Validators.required]],
+      password: [null, [Validators.required]],
+    });
   }
 
-  ngOnInit (): void {
+  ngOnInit(): void {
   }
 
   formLogin: FormGroup;

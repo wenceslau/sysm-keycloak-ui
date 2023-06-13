@@ -1,0 +1,29 @@
+<div class="header-body">
+    <mat-toolbar color="primary">
+        <span>wncsl-ui</span>
+        <span class="sml-spacer"></span>
+        <button mat-button (click)="reRouter('home')">
+            <mat-icon aria-hidden="false" fontIcon="home"></mat-icon>
+            Home
+        </button>
+        <button mat-button [matMenuTriggerFor]="account">
+            <mat-icon>account_box</mat-icon>
+            Account
+        </button>
+        <mat-menu #account="matMenu">
+            <button mat-menu-item (click)="reRouter('permission')">Permissions</button>
+            <button mat-menu-item (click)="reRouter('user')">Users</button>
+        </mat-menu>
+        <button mat-button (click)="reRouter('login')">
+            <mat-icon>exit_to_app</mat-icon>
+            Log Out
+        </button>
+        <span class="big-spacer"></span>
+        <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+            <mat-icon>favorite</mat-icon>
+        </button>
+        <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+            <mat-icon>share</mat-icon>
+        </button>
+    </mat-toolbar>
+</div>
