@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 import { lastValueFrom } from 'rxjs';
+import { HandlerService } from 'src/app/@main/services/handler.service';
 
 
 @Component({
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private auth: AuthorizerService,
+    private handler: HandlerService,
     private formBuild: FormBuilder) {
 
     this.formLogin = this.formBuild.group({
@@ -42,10 +44,9 @@ export class LoginComponent implements OnInit {
     let value = lastValueFrom(obs);
 
     value.then(data => {
-      console.log(data);
       this.router.navigate(['/home'])
     }).catch(err => {
-      console.error(err);
+      this.handler.addSnackBarError(err)
       this.error = err;
     })
 

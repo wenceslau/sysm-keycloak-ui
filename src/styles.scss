@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* HTML */
 html,
 body {
     height: 96%;
@@ -22,10 +23,29 @@ body {
     justify-content: center;
 }
 
+
+/* Mat Table */
 .column-uuid {
     width: 20%;
 }
 
 .column-action {
     width: 5%;
+}
+
+
+/* Mat Snackbar */
+.main-snackbar-error {
+    .mat-mdc-snack-bar-actions {
+        button {
+            color: #f44336 !important;
+        }
+    }
+}
+.main-snackbar-info {
+    .mat-mdc-snack-bar-actions {
+        button {
+            color: #ffd740 !important;
+        }
+    }
 }

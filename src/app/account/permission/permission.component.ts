@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subscriber } from 'rxjs';
 import { AppService, HttpVerb, ServiceParameter } from 'src/app/@main/services/app.service';
 import { PermissionDialogComponent } from '../permission-dialog/permission-dialog.component';
+import { HandlerService } from 'src/app/@main/services/handler.service';
 
 export interface Permission {
   uuid: string;
@@ -29,28 +30,32 @@ export class PermissionComponent implements AfterViewInit {
   pageSizeOptions = [5, 10, 15, 20, 25];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  isLoadingResults = false;
   selectedValue: string;
   valueFilter: string;
 
   constructor(
     public appService: AppService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    public handler: HandlerService) {
 
   }
 
   ngAfterViewInit() {
 
-    let subscriber: Subscriber<string>;
+    let subscriber: Subscriber<any>;
     let observable = new Observable(sub => {
       subscriber = sub;
-      this.getData(0, this.pageSize);
+      this.getData(0, this.pageSize, subscriber)
     });
+    
     observable.subscribe({
-      complete: () => {
-        this.dataSource.paginator = this.paginator;
+      next: (data) => {
+        console.log('>>>>>'+ data +' = '+ new Date())
+        //alert(data)
+        //this.dataSource.paginator = this.paginator;
       }
     });
-
   }
 
   openDialog(uuid: string) {
@@ -74,23 +79,21 @@ export class PermissionComponent implements AfterViewInit {
   }
 
   getData(pageIndex: number, pageSize: number, subscriber?: Subscriber<any>) {
-    console.log("this.paginator.length: " + this.paginator.length)
-    const pars = new ServiceParameter();
-    pars.addParameter("page", pageIndex);
-    pars.addParameter("size", pageSize);
+    console.log(">>>>>> get data")
+    const parameters = new ServiceParameter();
+    parameters.addParameter("page", pageIndex);
+    parameters.addParameter("size", pageSize);
     if (this.selectedValue && this.valueFilter) {
-      pars.addParameter(this.selectedValue, this.valueFilter);
+      parameters.addParameter(this.selectedValue, this.valueFilter);
     }
-    pars.path = "/permissions";
-    let observable = this.appService.executeHttpRequest(HttpVerb.GET, pars, false);
-    observable.subscribe({
+    parameters.path = "/permissions";
+
+    this.isLoadingResults = true;
+    this.appService.get(parameters, subscriber).subscribe({
       next: (data) => {
         this.dataSource = new MatTableDataSource<Permission>(data.content);
         this.length = data.totalElements
-        if (subscriber) subscriber.complete();
-      },
-      error: (err) => {
-        console.log("error: " + err);
+        this.isLoadingResults = false;
         if (subscriber) subscriber.complete();
       }
     });

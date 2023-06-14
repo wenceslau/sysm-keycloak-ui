@@ -1,7 +1,10 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subscriber, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+
+
+import { HandlerService } from './handler.service';
 
 export class ServiceParameter {
 
@@ -76,39 +79,68 @@ export class AppService {
 
   private _url = "http://localhost:8082"
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private handler: HandlerService) {
 
-  executeHttpRequest(verb: HttpVerb, pars: ServiceParameter, block: boolean): Observable<any> {
+  }
+
+  executeHttpRequest(httoVerb: HttpVerb, paraeters: ServiceParameter, subscriber?: Subscriber<any>): Observable<any> {
+    console.log("execute")
     let httpHeader = new HttpHeaders();
     httpHeader = httpHeader
-    .append('Content-Type', 'application/json')
-    .append('Authorization', 'Bearer '+localStorage.getItem('token'));
-    const url = this.url(pars);
+      .append('Content-Type', 'application/json')
+      .append('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    const url = this.url(paraeters);
     console.log(url);
-    switch (verb) {
+    let http$;
+    switch (httoVerb) {
       case HttpVerb.GET:
-        return this.http
-          .get<any>(url, { headers: httpHeader, params: pars.httpParams })
-          .pipe(retry(1), catchError(this.handleError));
+        http$ = this.http.get<any>(url, { headers: httpHeader, params: paraeters.httpParams });
+        break;
       case HttpVerb.POST:
-        return this.http
-          .post<any>(url, pars.object, { headers: httpHeader, params: pars.httpParams })
-          .pipe(retry(1), catchError(this.handleError));
+        http$ = this.http.post<any>(url, paraeters.object, { headers: httpHeader, params: paraeters.httpParams })
+        break;
       case HttpVerb.PUT:
-        return this.http
-          .put<any>(url, pars.object, { headers: httpHeader, params: pars.httpParams })
-          .pipe(retry(1), catchError(this.handleError));
+        http$ = this.http.put<any>(url, paraeters.object, { headers: httpHeader, params: paraeters.httpParams })
+        break;
       case HttpVerb.PATCH:
-        return this.http
-          .put<any>(url, pars.object, { headers: httpHeader, params: pars.httpParams })
-          .pipe(retry(1), catchError(this.handleError));
+        http$ = this.http.put<any>(url, paraeters.object, { headers: httpHeader, params: paraeters.httpParams })
+        break;
       case HttpVerb.DELETE:
-        return this.http
-          .delete<any>(url, { headers: httpHeader, params: pars.httpParams })
-          .pipe(retry(1), catchError(this.handleError));
-      default:
-        return new Observable();
+        http$ = this.http.delete<any>(url, { headers: httpHeader, params: paraeters.httpParams })
+        break;
     }
+
+    http$.pipe(retry(0)).subscribe({
+      // next(data) {
+      //   console.log('>>>>>'+ new Date())
+      //   if (subscriber) subscriber.next("class app service");
+      //   return data;
+      // },
+      error: (err) => {
+        console.log('Error' + err)
+        if (subscriber) subscriber.complete();
+        this.handleError(err);
+      },
+    });
+
+    return http$;
+  }
+
+  get(paraeters: ServiceParameter, subscriber?: Subscriber<any>): Observable<any> {
+    console.log("Get")
+    return this.executeHttpRequest(HttpVerb.GET, paraeters, subscriber);
+  }
+  post(paraeters: ServiceParameter, subscriber?: Subscriber<any>): any {
+    return this.executeHttpRequest(HttpVerb.POST, paraeters, subscriber);
+  }
+  put(paraeters: ServiceParameter, subscriber?: Subscriber<any>): any {
+    return this.executeHttpRequest(HttpVerb.PUT, paraeters, subscriber);
+  }
+  patch(paraeters: ServiceParameter, subscriber?: Subscriber<any>): any {
+    return this.executeHttpRequest(HttpVerb.PATCH, paraeters, subscriber);
+  }
+  delete(paraeters: ServiceParameter, subscriber?: Subscriber<any>): any {
+    return this.executeHttpRequest(HttpVerb.DELETE, paraeters, subscriber);
   }
 
   private url(pars: ServiceParameter): string {
@@ -124,18 +156,23 @@ export class AppService {
   }
 
   private handleError(error: any) {
-    console.log(error)
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
+    let errorMessage = JSON.stringify(error);
+    console.log(errorMessage)
+
+    if (error.error) {
       errorMessage = error.error.message;
+
     } else {
-      // Get server-side error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}\nDescription ${error.error.error_description}`;
+      errorMessage = error.error.error_description;
+
     }
-    //window.alert(errorMessage);
+
+    console.log(errorMessage)
+    this.handler.addSnackBarError(errorMessage)
+
     return throwError(() => {
       return errorMessage;
+
     });
   }
 

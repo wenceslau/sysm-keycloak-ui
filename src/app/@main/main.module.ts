@@ -16,7 +16,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 import { AccessDeniedComponent } from './component-pages/access-denied/access-denied.component';
@@ -26,6 +27,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatSelectModule } from '@angular/material/select';
+import { SnackBarComponent } from './component-itens/snack-bar/snack-bar.component';
 
 
 @NgModule({
@@ -33,6 +35,7 @@ import { MatSelectModule } from '@angular/material/select';
     HeaderComponent,
     AccessDeniedComponent,
     HomeComponent,
+    SnackBarComponent,
   ],
   imports: [
     CommonModule,
@@ -56,6 +59,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatDialogModule,
     MatCheckboxModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
 
   ],
   exports: [
@@ -83,6 +88,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatDialogModule,
     MatCheckboxModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
 
   ],
   providers: [

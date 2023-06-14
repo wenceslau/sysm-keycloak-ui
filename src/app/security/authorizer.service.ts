@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError, map, tap } from 'rxjs/operators';
+import { HandlerService } from '../@main/services/handler.service';
 
 
 @Injectable({
@@ -49,13 +50,13 @@ export class AuthorizerService {
     console.log(error)
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
-      // Get client-side error
       errorMessage = error.error.message;
+
     } else {
-      // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}\nDescription ${error.error.error_description}`;
+
     }
-    //window.alert(errorMessage);
+    
     return throwError(() => {
       return errorMessage;
     });
