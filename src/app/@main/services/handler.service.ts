@@ -11,26 +11,36 @@ import {
 })
 export class HandlerService {
 
+  isLoadingResults = false;
+
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
   duration: number = (5 * 1000);
 
-  constructor(private snackBar: MatSnackBar) { 
+  constructor(private snackBar: MatSnackBar) {
   }
 
-  error(error: any) {
-    let errorMessage = JSON.stringify(error);
-    console.log(errorMessage)
+  getError(err: any): string {
+    console.log(err)
+    let errorMessage;
 
-    if (error.error) {
-      errorMessage = error.error.message;
+    errorMessage = err?.error?.exception
+    if (errorMessage)
+      return err?.error?.message;
 
-    } else {
-      errorMessage = error.error.error_description;
+    errorMessage = err?.error?.error;
+    if (errorMessage)
+      return errorMessage;
 
-    }
+    errorMessage = err?.message
+    if (errorMessage)
+      return errorMessage;
 
-    this.addSnackBarError(errorMessage)
+    return JSON.stringify(err);
+  }
+
+  throwError(err: any) {
+    this.addSnackBarError(this.getError(err))
   }
 
   addSnackBarError(message: string) {
@@ -49,5 +59,9 @@ export class HandlerService {
       panelClass: 'main-snackbar-info',
       duration: this.duration
     });
+  }
+
+  loading() {
+    this.isLoadingResults = !this.isLoadingResults;
   }
 }

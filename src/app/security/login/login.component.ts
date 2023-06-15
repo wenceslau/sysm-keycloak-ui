@@ -31,23 +31,26 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  formLogin: FormGroup;
-  error: string = "";
+  formLogin: FormGroup
+  error: string = ""
 
   login() {
-
-    this.error = "";
-    let user = this.formLogin.value.username;
-    let pass = this.formLogin.value.password;
+    this.handler.loading()
+    this.error = ""
+    let user = this.formLogin.value.username
+    let pass = this.formLogin.value.password
 
     this.auth.login(user, pass)
       .then(result => {
         this.router.navigate(['/home'])
       }).catch(err => {
-        this.handler.addSnackBarError(err)
-        this.error = err;
+        let errMsg = this.handler.getError(err);
+        if (errMsg == 'invalid_grant' || errMsg == 'unauthorized')
+          errMsg = "User or password invalid"
+        this.handler.addSnackBarError(errMsg);
+        this.error = errMsg
       }).finally(() => {
-        console.log("")
+        this.handler.loading()
       })
   }
 

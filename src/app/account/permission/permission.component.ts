@@ -30,7 +30,6 @@ export class PermissionComponent implements AfterViewInit {
   pageSizeOptions = [5, 10, 15, 20, 25];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  isLoadingResults = true;
   selectedValue: string;
   valueFilter: string;
 
@@ -72,7 +71,15 @@ export class PermissionComponent implements AfterViewInit {
     this.paginator.firstPage();
   } 
 
+  loadData(event: PageEvent) {
+    console.log(event);
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.getData(this.pageIndex, this.pageSize);
+  }
+
   getData(pageIndex: number, pageSize: number, subscriber?: Subscriber<any>) {
+    this.handler.loading();
     const parameters = new ServiceParameter();
     parameters.addParameter("page", pageIndex);
     parameters.addParameter("size", pageSize);
@@ -85,18 +92,12 @@ export class PermissionComponent implements AfterViewInit {
       .then(result => {
         this.dataSource = new MatTableDataSource<Permission>(result.content);
         this.length = result.totalElements
-        this.isLoadingResults = false;
       }).catch(err => {
-        this.handler.error(err)
+        this.handler.throwError(err)
       }).finally( ()=> {
+        this.handler.loading();
         subscriber?.complete();
       })
   }
 
-  loadData(event: PageEvent) {
-    console.log(event);
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.getData(this.pageIndex, this.pageSize);
-  }
 }

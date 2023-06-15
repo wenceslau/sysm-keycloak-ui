@@ -4,3 +4,7 @@
 <div class="container">
     <router-outlet></router-outlet>
 </div>
+
+<div class="loading-shade" *ngIf="handler.isLoadingResults">
+    <mat-spinner *ngIf="handler.isLoadingResults"></mat-spinner>
+</div>

@@ -38,19 +38,24 @@ export class PermissionDialogComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.uuid) {
-      this.find();
+      this.httpFind();
     }
   }
 
   save() {
     if (this.editing) {
-      this.update();
+      this.httpUpdate();
     } else {
-      this.insert();
+      this.httpInsert();
     }
   }
+  
+  get editing() {
+    return Boolean(this.formInput.value.uuid);
+  }
 
-  private find(subscriber?: Subscriber<any>) {
+  private httpFind(subscriber?: Subscriber<any>) {
+    this.handler.loading()
     const pars = new ServiceParameter();
     pars.path = "/permissions/" + this.uuid;
 
@@ -58,13 +63,15 @@ export class PermissionDialogComponent implements AfterViewInit {
       .then(result => {
         this.formInput.patchValue(result);
       }).catch(err => {
-        this.handler.error(err)
+        this.handler.throwError(err)
       }).finally( ()=> {
+        this.handler.loading()
         subscriber?.complete();
       })
   }
 
-  private insert(subscriber?: Subscriber<any>) {
+  private httpInsert(subscriber?: Subscriber<any>) {
+    this.handler.loading()
     const pars = new ServiceParameter();
     pars.path = "/permissions";
     pars.object = this.formInput.value;
@@ -74,13 +81,16 @@ export class PermissionDialogComponent implements AfterViewInit {
         this.dialogRef.close(this.uuid);
         this.handler.addSnackBarInfo("Record has been saved successfully")
       }).catch(err => {
-        this.handler.error(err)
+        this.handler.throwError(err)
       }).finally( ()=> {
+        this.handler.loading()
         subscriber?.complete();
       })
   }
 
-  private update(subscriber?: Subscriber<any>) {
+  private httpUpdate(subscriber?: Subscriber<any>) {
+    this.handler.loading()
+
     const pars = new ServiceParameter();
     pars.path = "/permissions/" + this.uuid;
     pars.object = this.formInput.value;
@@ -90,15 +100,13 @@ export class PermissionDialogComponent implements AfterViewInit {
         this.dialogRef.close(this.uuid);
         this.handler.addSnackBarInfo("Record has been saved successfully")
       }).catch(err => {
-        this.handler.error(err)
+        this.handler.throwError(err)
       }).finally( ()=> {
+        this.handler.loading()
         subscriber?.complete();
       })
 
   }
 
-  get editing() {
-    return Boolean(this.formInput.value.uuid);
-  }
 
 }
