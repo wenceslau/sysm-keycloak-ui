@@ -40,16 +40,15 @@ export class LoginComponent implements OnInit {
     let user = this.formLogin.value.username;
     let pass = this.formLogin.value.password;
 
-    let obs = this.auth.login(user, pass);
-    let value = lastValueFrom(obs);
-
-    value.then(data => {
-      this.router.navigate(['/home'])
-    }).catch(err => {
-      this.handler.addSnackBarError(err)
-      this.error = err;
-    })
-
+    this.auth.login(user, pass)
+      .then(result => {
+        this.router.navigate(['/home'])
+      }).catch(err => {
+        this.handler.addSnackBarError(err)
+        this.error = err;
+      }).finally(() => {
+        console.log("")
+      })
   }
 
 }

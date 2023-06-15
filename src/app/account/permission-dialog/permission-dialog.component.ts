@@ -37,23 +37,9 @@ export class PermissionDialogComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log(this.uuid);
     if (this.uuid) {
-      this.getData();
+      this.find();
     }
-  }
-
-  getData(subscriber?: Subscriber<any>) {
-    const pars = new ServiceParameter();
-    pars.path = "/permissions/" + this.uuid;
-
-    let observable = this.appService.executeHttpRequest(HttpVerb.GET, pars, subscriber);
-    observable.subscribe({
-      next: (data) => {
-        this.formInput.patchValue(data);
-        if (subscriber) subscriber.complete();
-      }
-    });
   }
 
   save() {
@@ -64,35 +50,51 @@ export class PermissionDialogComponent implements AfterViewInit {
     }
   }
 
-  insert(subscriber?: Subscriber<any>) {
+  private find(subscriber?: Subscriber<any>) {
+    const pars = new ServiceParameter();
+    pars.path = "/permissions/" + this.uuid;
+
+    this.appService.get(pars, subscriber)
+      .then(result => {
+        this.formInput.patchValue(result);
+      }).catch(err => {
+        this.handler.error(err)
+      }).finally( ()=> {
+        subscriber?.complete();
+      })
+  }
+
+  private insert(subscriber?: Subscriber<any>) {
     const pars = new ServiceParameter();
     pars.path = "/permissions";
     pars.object = this.formInput.value;
 
-    let observable = this.appService.executeHttpRequest(HttpVerb.POST, pars, subscriber);
-    observable.subscribe({
-      next: (data) => {
+    this.appService.post(pars, subscriber)
+      .then(result => {
         this.dialogRef.close(this.uuid);
         this.handler.addSnackBarInfo("Record has been saved successfully")
-        if (subscriber) subscriber.complete();
-      }
-    });
+      }).catch(err => {
+        this.handler.error(err)
+      }).finally( ()=> {
+        subscriber?.complete();
+      })
   }
 
-  update(subscriber?: Subscriber<any>) {
+  private update(subscriber?: Subscriber<any>) {
     const pars = new ServiceParameter();
     pars.path = "/permissions/" + this.uuid;
     pars.object = this.formInput.value;
 
-    let observable = this.appService.executeHttpRequest(HttpVerb.PUT, pars, subscriber);
-    observable.subscribe({
-      next: (data) => {
-        console.log("data: " + data);
+    this.appService.put(pars, subscriber)
+      .then(result => {
         this.dialogRef.close(this.uuid);
         this.handler.addSnackBarInfo("Record has been saved successfully")
-        if (subscriber) subscriber.complete();
-      }
-    });
+      }).catch(err => {
+        this.handler.error(err)
+      }).finally( ()=> {
+        subscriber?.complete();
+      })
+
   }
 
   get editing() {

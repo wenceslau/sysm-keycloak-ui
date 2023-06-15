@@ -15,7 +15,23 @@ export class HandlerService {
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   duration: number = (5 * 1000);
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar) { 
+  }
+
+  error(error: any) {
+    let errorMessage = JSON.stringify(error);
+    console.log(errorMessage)
+
+    if (error.error) {
+      errorMessage = error.error.message;
+
+    } else {
+      errorMessage = error.error.error_description;
+
+    }
+
+    this.addSnackBarError(errorMessage)
+  }
 
   addSnackBarError(message: string) {
     this.snackBar.open(message, ":( Ops", {

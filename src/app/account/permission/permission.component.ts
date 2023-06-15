@@ -25,12 +25,12 @@ export class PermissionComponent implements AfterViewInit {
   dataSource: any;
 
   pageIndex = 0;
-  pageSize = 5;
+  pageSize = 10;
   length = 0;
   pageSizeOptions = [5, 10, 15, 20, 25];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  isLoadingResults = false;
+  isLoadingResults = true;
   selectedValue: string;
   valueFilter: string;
 
@@ -38,22 +38,16 @@ export class PermissionComponent implements AfterViewInit {
     public appService: AppService,
     public dialog: MatDialog,
     public handler: HandlerService) {
-
   }
 
   ngAfterViewInit() {
-
     let subscriber: Subscriber<any>;
     let observable = new Observable(sub => {
       subscriber = sub;
       this.getData(0, this.pageSize, subscriber)
     });
-    
     observable.subscribe({
-      next: (data) => {
-        console.log('>>>>>'+ data +' = '+ new Date())
-        //alert(data)
-        //this.dataSource.paginator = this.paginator;
+      complete: () => {
       }
     });
   }
@@ -76,10 +70,9 @@ export class PermissionComponent implements AfterViewInit {
     this.selectedValue = '';
     this.getData(0, this.pageSize);
     this.paginator.firstPage();
-  }
+  } 
 
   getData(pageIndex: number, pageSize: number, subscriber?: Subscriber<any>) {
-    console.log(">>>>>> get data")
     const parameters = new ServiceParameter();
     parameters.addParameter("page", pageIndex);
     parameters.addParameter("size", pageSize);
@@ -88,15 +81,16 @@ export class PermissionComponent implements AfterViewInit {
     }
     parameters.path = "/permissions";
 
-    this.isLoadingResults = true;
-    this.appService.get(parameters, subscriber).subscribe({
-      next: (data) => {
-        this.dataSource = new MatTableDataSource<Permission>(data.content);
-        this.length = data.totalElements
+    this.appService.get(parameters, subscriber)
+      .then(result => {
+        this.dataSource = new MatTableDataSource<Permission>(result.content);
+        this.length = result.totalElements
         this.isLoadingResults = false;
-        if (subscriber) subscriber.complete();
-      }
-    });
+      }).catch(err => {
+        this.handler.error(err)
+      }).finally( ()=> {
+        subscriber?.complete();
+      })
   }
 
   loadData(event: PageEvent) {

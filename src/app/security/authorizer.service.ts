@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, throwError } from 'rxjs';
+import { Observable, lastValueFrom, throwError } from 'rxjs';
 import { retry, catchError, map, tap } from 'rxjs/operators';
 import { HandlerService } from '../@main/services/handler.service';
 
@@ -21,7 +21,7 @@ export class AuthorizerService {
     this.loadToken();
   }
 
-  login(email: string, password: string): Observable<any> {
+  async login(email: string, password: string): Promise<any> {
     this.clearToken();
 
     this.oauthTokenUrl = 'http://localhost:8081/oauth/token'
@@ -34,37 +34,29 @@ export class AuthorizerService {
 
     const body = `username=${email}&password=${password}&grant_type=password`;
 
-    return this.http.post<any>(this.oauthTokenUrl, body, { headers, withCredentials: true })
-      .pipe(
-        retry(1),
-        map(resp => {
-          this.storeToken(resp.access_token);
-          return resp.access_token;
-        }),      
-        catchError(err => 
-          this.handleError(err)
-        ))
-  }
+    let observable: Observable<any>;
+    observable = this.http.post<any>(this.oauthTokenUrl, body, { headers, withCredentials: true })
+    const source$ = observable.pipe();
 
-  handleError(error: any) {
-    console.log(error)
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = error.error.message;
-
-    } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}\nDescription ${error.error.error_description}`;
-
-    }
-    
-    return throwError(() => {
-      return errorMessage;
-    });
+    return await lastValueFrom(source$)
+      .then(response => {
+        this.storeToken(response.access_token);
+        return response;
+      })
+    // return this.http.post<any>(this.oauthTokenUrl, body, { headers, withCredentials: true })
+    //   .pipe(
+    //     retry(1),
+    //     map(resp => {
+    //       this.storeToken(resp.access_token);
+    //       return resp.access_token;
+    //     }),
+    //     catchError(err =>
+    //       this.handleError(err)
+    //     ))
   }
 
   // Verifica se a permissao contem nos authorities do toekn
   hasPermission(permission: string) {
-    console.log(this.jwtPayload)
     if (this.jwtPayload)
       return this.jwtPayload && this.jwtPayload.authorities.includes(permission);
   }
