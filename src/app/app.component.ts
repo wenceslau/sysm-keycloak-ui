@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { IconSetService } from '@coreui/icons-angular';
+import { cilListNumbered, cilPaperPlane, brandSet } from '@coreui/icons'
+
 import { HandlerService } from './@main/services/handler.service';
 
 @Component({
@@ -12,7 +16,9 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-    public handler: HandlerService) {
+    public handler: HandlerService,
+    iconSet: IconSetService ) {
+    iconSet.icons = { cilListNumbered, cilPaperPlane, ...brandSet };
   }
 
   isNotLogin(): boolean {

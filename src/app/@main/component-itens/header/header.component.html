@@ -1,7 +1,10 @@
 <div class="header-body">
     <mat-toolbar color="primary">
-        <span>wncsl-ui</span>
         <span class="sml-spacer"></span>
+        <!-- <img cImg align="start" [rounded]="true" src="assets/security.jpg" width="80" /> -->
+        <mat-icon class="icon-display">people</mat-icon>
+        <span class="mdn-spacer"></span>
+
         <button mat-button (click)="reRouter('home')">
             <mat-icon aria-hidden="false" fontIcon="home"></mat-icon>
             Home
@@ -19,11 +22,12 @@
             Log Out
         </button>
         <span class="big-spacer"></span>
-        <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-            <mat-icon>favorite</mat-icon>
-        </button>
+        <span>Welcome:</span>
+        <span class="min-spacer"></span>
+        <span>{{userNameLooged()}}</span>
+
         <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-            <mat-icon>share</mat-icon>
+            <mat-icon>notifications</mat-icon>
         </button>
     </mat-toolbar>
 </div>

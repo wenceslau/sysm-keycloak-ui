@@ -1,0 +1,21 @@
+
+Node version 18.12.1
+Npm version 8.19.4
+Ng version 16.0.5
+	@angular-devkit/architect       0.1600.5
+	@angular-devkit/build-angular   16.0.5
+	@angular-devkit/core            16.0.5
+	@angular-devkit/schematics      16.0.5
+	@angular/cdk                    16.0.4
+	@angular/material               16.0.4
+	@schematics/angular             16.0.5	
+	rxjs                            7.8.1
+	typescript                      5.0.4
+	
+ng add @angular/material
+npm i @auth0/angular-jwt
+
+npm install @coreui/angular@
+npm install @coreui/icons
+npm install @coreui/icons-angular
+

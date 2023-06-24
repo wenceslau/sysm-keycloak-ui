@@ -5,6 +5,7 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import { AuthorizerService } from 'src/app/security/authorizer.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class HandlerService {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   duration: number = (5 * 1000);
 
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBar: MatSnackBar, public auth: AuthorizerService) {
   }
 
   getError(err: any): string {
@@ -63,5 +64,12 @@ export class HandlerService {
 
   loading() {
     this.isLoadingResults = !this.isLoadingResults;
+  }
+
+  userNameLogged(): string {
+    if (this.auth && this.auth.jwtPayload) {
+      return this.auth.jwtPayload.user_name;
+    }
+    return ''
   }
 }

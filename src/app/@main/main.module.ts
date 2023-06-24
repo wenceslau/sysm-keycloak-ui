@@ -5,6 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
 import { HomeComponent } from './component-pages/home/home.component';
+import { AccessDeniedComponent } from './component-pages/access-denied/access-denied.component';
+import { HeaderComponent } from './component-itens/header/header.component';
+
+import { ImgModule } from '@coreui/angular';
+import { IconModule, IconSetService } from '@coreui/icons-angular';
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,16 +23,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
-
-import { AccessDeniedComponent } from './component-pages/access-denied/access-denied.component';
-import { HeaderComponent } from './component-itens/header/header.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatSelectModule } from '@angular/material/select';
 import { SnackBarComponent } from './component-itens/snack-bar/snack-bar.component';
+import {MatDividerModule} from '@angular/material/divider';
+
 
 
 @NgModule({
@@ -45,6 +48,10 @@ import { SnackBarComponent } from './component-itens/snack-bar/snack-bar.compone
     FormsModule,
     ReactiveFormsModule,
 
+    //CoreUi Anguler
+    ImgModule,
+    IconModule, 
+
     //Material
     MatSlideToggleModule,
     MatButtonModule,
@@ -61,6 +68,7 @@ import { SnackBarComponent } from './component-itens/snack-bar/snack-bar.compone
     MatCheckboxModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatDividerModule
 
   ],
   exports: [
@@ -74,6 +82,10 @@ import { SnackBarComponent } from './component-itens/snack-bar/snack-bar.compone
     //components
     HeaderComponent,
 
+    //CoreUi Angular
+    ImgModule,
+    IconModule, 
+
     //Material
     MatSlideToggleModule,
     MatButtonModule,
@@ -90,11 +102,13 @@ import { SnackBarComponent } from './component-itens/snack-bar/snack-bar.compone
     MatCheckboxModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
+    MatDividerModule
 
   ],
   providers: [
     { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
-    JwtHelperService
+    JwtHelperService,
+    IconSetService
   ]
 })
 export class MainModule { }

@@ -2,12 +2,27 @@
     flex: 1 1 auto;
 }
 
+.mdn-spacer {
+    flex: 0.2 auto;
+}
+
 .sml-spacer {
     flex: 0.1;
 }
 
+.min-spacer {
+    flex: 0.04;
+}
 .header-body{
     padding-top: 1px;
-    padding-right: 90px;
-    padding-left: 90px;
+    padding-right: 200px;
+    padding-left: 200px;
 }
+
+.mat-toolbar-single-row {
+    height: 80px;
+}
+
+.icon-display {
+    transform: scale(3);
+ }

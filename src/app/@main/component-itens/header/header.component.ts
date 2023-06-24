@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { HandlerService } from '../../services/handler.service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
 export class HeaderComponent {
 
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private handler: HandlerService) {
   }
 
 
@@ -17,6 +18,10 @@ export class HeaderComponent {
 
     this.router.navigate(['/'+path])
 
+  }
+
+  userNameLooged(): string {
+    return this.handler.userNameLogged();
   }
 
 }
