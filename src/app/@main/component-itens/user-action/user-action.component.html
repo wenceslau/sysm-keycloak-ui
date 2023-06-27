@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>User Action</h2>
+
+<mat-dialog-content class="mat-typography">
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="action">
+            <th class="column-uuid" mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element"> {{element.action}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="userUuid">
+            <th mat-header-cell *matHeaderCellDef> User </th>
+            <td mat-cell *matCellDef="let element"> {{element.userUuid}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actionAt">
+            <th mat-header-cell *matHeaderCellDef> Action at </th>
+            <td mat-cell *matCellDef="let element"> {{element.actionAt}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectedRowIndex = row.id"
+            [class.demo-row-is-clicked]="selectedRowIndex == row.id"></tr>
+    </table>
+
+    <mat-paginator showFirstLastButtons [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+        (page)="loadData($event)">
+    </mat-paginator>
+
+</mat-dialog-content>

@@ -7,6 +7,7 @@ import { Observable, Subscriber } from 'rxjs';
 import { AppService, HttpVerb, ServiceParameter } from 'src/app/@main/services/app.service';
 import { PermissionDialogComponent } from '../permission-dialog/permission-dialog.component';
 import { HandlerService } from 'src/app/@main/services/handler.service';
+import { UserActionComponent } from 'src/app/@main/component-itens/user-action/user-action.component';
 
 export interface Permission {
   uuid: string;
@@ -65,11 +66,20 @@ export class PermissionComponent implements AfterViewInit {
     });
   }
 
+  openUserAction(uuid: string) {
+
+    const dialogRef = this.dialog.open(UserActionComponent, {
+      data: uuid,
+      width: '50%',
+    });
+  }
+
+
   reset() {
     this.selectedValue = '';
     this.getData(0, this.pageSize);
     this.paginator.firstPage();
-  } 
+  }
 
   loadData(event: PageEvent) {
     console.log(event);
@@ -83,6 +93,7 @@ export class PermissionComponent implements AfterViewInit {
     const parameters = new ServiceParameter();
     parameters.addParameter("page", pageIndex);
     parameters.addParameter("size", pageSize);
+
     if (this.selectedValue && this.valueFilter) {
       parameters.addParameter(this.selectedValue, this.valueFilter);
     }
@@ -94,7 +105,7 @@ export class PermissionComponent implements AfterViewInit {
         this.length = result.totalElements
       }).catch(err => {
         this.handler.throwError(err)
-      }).finally( ()=> {
+      }).finally(() => {
         this.handler.loading();
         subscriber?.complete();
       })

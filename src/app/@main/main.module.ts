@@ -30,6 +30,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MatSelectModule } from '@angular/material/select';
 import { SnackBarComponent } from './component-itens/snack-bar/snack-bar.component';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatGridListModule} from '@angular/material/grid-list';
+
+
+import { UserActionComponent } from './component-itens/user-action/user-action.component';
 
 
 
@@ -39,6 +43,7 @@ import {MatDividerModule} from '@angular/material/divider';
     AccessDeniedComponent,
     HomeComponent,
     SnackBarComponent,
+    UserActionComponent,
   ],
   imports: [
     CommonModule,
@@ -68,7 +73,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatCheckboxModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatDividerModule
+    MatDividerModule,
+    MatGridListModule
 
   ],
   exports: [
@@ -102,7 +108,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatCheckboxModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatDividerModule
+    MatDividerModule,
+    MatGridListModule
 
   ],
   providers: [

@@ -12,11 +12,20 @@ export class ServiceParameter {
   constructor() {
   }
 
+  private _url: string = 'http://localhost:8082';
   private _httpParams: HttpParams = new HttpParams();
   private _path: string;
   private _object: any;
   private _code: number;
   private _isBlob: Boolean
+
+  get url(): string {
+    return this._url;
+  }
+
+  set url(u: string) {
+    this._url = u;
+  }
 
   get path(): string {
     return this._path;
@@ -78,8 +87,6 @@ export enum HttpVerb {
 })
 export class AppService {
 
-  private url = "http://localhost:8082"
-
   constructor(private http: HttpClient, private handler: HandlerService) {
 
   }
@@ -132,7 +139,7 @@ export class AppService {
   private async executeHttpRequest(httoVerb: HttpVerb, parameters: ServiceParameter, subscriber?: Subscriber<any>): Promise<any> {
     console.log('executeHttpRequest1')
     const httpHeader = this.geHeaders();
-    const url = this.getUrl(parameters);
+    const url = this.getUrlPath(parameters);
     let observable: Observable<any>;
     switch (httoVerb) {
       case HttpVerb.GET:
@@ -176,8 +183,8 @@ export class AppService {
     return httpHeader;
   }
 
-  private getUrl(pars: ServiceParameter): string {
-    let path = this.url;
+  private getUrlPath(pars: ServiceParameter): string {
+    let path = pars.url;
 
     if (pars.path != null)
       path += '' + pars.path;
