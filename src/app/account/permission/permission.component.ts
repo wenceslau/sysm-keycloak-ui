@@ -70,7 +70,7 @@ export class PermissionComponent implements AfterViewInit {
 
     const dialogRef = this.dialog.open(UserActionComponent, {
       data: uuid,
-      width: '50%',
+      width: '70%',
     });
   }
 

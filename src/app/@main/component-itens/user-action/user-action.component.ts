@@ -6,12 +6,19 @@ import { AppService, ServiceParameter } from '../../services/app.service';
 import { HandlerService } from '../../services/handler.service';
 import { Observable, Subscriber } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 
 
 export interface UserAction {
   action: string;
   userUuid: string;
   actionAt: Date;
+  objectValue: string;
+}
+
+export class JsonObject {
+  column: string;
+  value: any;
 }
 
 
@@ -24,20 +31,25 @@ export class UserActionComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['action', 'userUuid', 'actionAt'];
   dataSource: any;
+  columnsJsonObject: string[] = ['column', 'value'];
+  dataJsonObject: any;
 
-  selectedRowIndex:any;
+  selectedRowIndex: any;
+  selectedRow: any;
+
 
   pageIndex = 0;
-  pageSize = 10;
+  pageSize = 9;
   length = 0;
-  pageSizeOptions = [5, 10, 15, 20, 25];
+  pageSizeOptions = [9, 13, 17, 21, 25];
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     public appService: AppService,
     public handler: HandlerService,
+    private scrollDispatcher: ScrollDispatcher,
     @Inject(MAT_DIALOG_DATA) public uuid: string) {
-    
+
   }
 
   ngAfterViewInit() {
@@ -68,6 +80,9 @@ export class UserActionComponent implements AfterViewInit {
       .then(result => {
         this.dataSource = new MatTableDataSource<UserAction>(result.content);
         this.length = result.totalElements
+        if (this.dataSource.data) {
+          this.onRowSelect(this.dataSource.data[0])
+        }
       }).catch(err => {
         this.handler.throwError(err)
       }).finally(() => {
@@ -83,9 +98,97 @@ export class UserActionComponent implements AfterViewInit {
     this.getData(this.pageIndex, this.pageSize);
   }
 
-  highlight(row: any){
-    console.log(row)
-    this.selectedRowIndex=row.id;
+  onRowSelect(row: any) {
+    this.selectedRow = row;
+    this.selectedRowIndex = row.id
+    this.getDataJsonObject(row);
+  }
+
+  private getDataJsonObject(data: UserAction) {
+    let values: JsonObject[] = []
+    try {
+      let json = JSON.parse(data.objectValue);
+
+      for (let prop in json) {
+        // if (prop === 'ID')
+        //   continue;
+        let val = json[prop];
+        if (typeof val === 'object') {
+          val = this.getValueProperity(val);
+        }
+        values.push({ column: prop, value: val });
+      }
+
+      values = values.sort((one, two) => (one.column.toUpperCase() < two.column.toUpperCase() ? -1 : 1));
+    } catch (e) {
+      values.push({ column: 'Message', value: data.objectValue });
+    }
+    this.dataJsonObject = new MatTableDataSource<JsonObject>(values);
+  }
+
+  private getValueProperity(json: any) {
+    if (json === null) {
+      return '';
+    }
+
+    if (this.hasPropertie(json, 'uuid')) {
+      return json['uuid'];
+    }
+
+    if (this.hasPropertie(json, 'id')) {
+      return json['id'];
+    }
+
+    let prop = this.hasPropertieStartWith(json, 'id', 2)
+    if (prop) {
+      return json[prop];
+    }
+
+    prop = this.hasPropertieStartWith(json, 'nom', 3)
+    if (prop) {
+      return json[prop];
+    }
+
+    return this.getValueList(json);
+
+  }
+
+  private hasPropertie(json: any, column: string): boolean {
+    for (let prop in json) {
+      if (prop === column) {
+        if (json[prop] !== null) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private hasPropertieStartWith(json: any, column: string, len: number): string {
+    for (let prop in json) {
+      if (prop.length >= len) {
+        if (prop.substring(0, len) === column) {
+          return prop;
+        }
+      }
+    }
+    return '';
+  }
+
+  private getValueList(json: any): string {
+    let value = [];
+    value = json;
+    let code = '';
+    if (Array.isArray(value))
+      value.forEach(element => {
+        if (this.hasPropertie(element, 'uuid')) {
+          code = code + ' ' + element['uuid'];
+        }
+        if (this.hasPropertie(element, 'id')) {
+          code = code + ' ' + element['id'];
+        }
+      });
+    return code;
   }
 
 }

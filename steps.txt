@@ -15,7 +15,10 @@ Ng version 16.0.5
 ng add @angular/material
 npm i @auth0/angular-jwt
 
+npm install @angular/material
 npm install @coreui/angular@
 npm install @coreui/icons
 npm install @coreui/icons-angular
+
+npm install @angular/flex-layout --save
 

@@ -32,6 +32,7 @@ import { SnackBarComponent } from './component-itens/snack-bar/snack-bar.compone
 import {MatDividerModule} from '@angular/material/divider';
 import {MatGridListModule} from '@angular/material/grid-list';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { UserActionComponent } from './component-itens/user-action/user-action.component';
 
@@ -56,6 +57,8 @@ import { UserActionComponent } from './component-itens/user-action/user-action.c
     //CoreUi Anguler
     ImgModule,
     IconModule, 
+
+    FlexLayoutModule,
 
     //Material
     MatSlideToggleModule,
@@ -91,6 +94,8 @@ import { UserActionComponent } from './component-itens/user-action/user-action.c
     //CoreUi Angular
     ImgModule,
     IconModule, 
+
+    FlexLayoutModule,
 
     //Material
     MatSlideToggleModule,

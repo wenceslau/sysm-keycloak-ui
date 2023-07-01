@@ -54,6 +54,15 @@ export class PermissionDialogComponent implements AfterViewInit {
     return Boolean(this.formInput.value.uuid);
   }
 
+    
+  get title() {
+   if (this.editing){
+    return "Permission - Edit" 
+   }
+   return "Permission - New" 
+
+  }
+
   private httpFind(subscriber?: Subscriber<any>) {
     this.handler.loading()
     const pars = new ServiceParameter();

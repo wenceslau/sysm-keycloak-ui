@@ -1,31 +1,66 @@
-<h2 mat-dialog-title>User Action</h2>
+<h2 mat-dialog-title>User Action - {{uuid}} </h2>
 
 <mat-dialog-content class="mat-typography">
+<!-- 
+    <div fxLayout="row">
+        <div fxFlex>First item in row</div>
+        <div fxFlex>Second item in row</div>
+    </div>
+    <div fxLayout="column">
+        <div fxFlex>First item in column</div>
+        <div fxFlex>Second item in column</div>
+    </div> -->
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-        <ng-container matColumnDef="action">
-            <th class="column-uuid" mat-header-cell *matHeaderCellDef> Action </th>
-            <td mat-cell *matCellDef="let element"> {{element.action}} </td>
-        </ng-container>
+    <div fxLayout="row" fxLayoutGap="30px">
+        <div style="width: 100%;">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <ng-container matColumnDef="action">
+                    <th class="column-uuid" mat-header-cell *matHeaderCellDef> Action </th>
+                    <td mat-cell *matCellDef="let element"> {{element.action}} </td>
+                </ng-container>
+                <ng-container matColumnDef="userUuid">
+                    <th mat-header-cell *matHeaderCellDef> User </th>
+                    <td mat-cell *matCellDef="let element"> {{element.userUuid}} </td>
+                </ng-container>
+                <ng-container matColumnDef="actionAt">
+                    <th mat-header-cell *matHeaderCellDef> Action at </th>
+                    <td mat-cell *matCellDef="let element"> {{element.actionAt | date: 'MMM d, y, h:mm:ss a'}} </td>
+                </ng-container>
 
-        <ng-container matColumnDef="userUuid">
-            <th mat-header-cell *matHeaderCellDef> User </th>
-            <td mat-cell *matCellDef="let element"> {{element.userUuid}} </td>
-        </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowSelect(row)"
+                    [class.demo-row-is-clicked]="selectedRowIndex == row.id"></tr>
+            </table>
 
-        <ng-container matColumnDef="actionAt">
-            <th mat-header-cell *matHeaderCellDef> Action at </th>
-            <td mat-cell *matCellDef="let element"> {{element.actionAt}} </td>
-        </ng-container>
+            <mat-paginator showFirstLastButtons [length]="length" [pageSize]="pageSize"
+                [pageSizeOptions]="pageSizeOptions" (page)="loadData($event)">
+            </mat-paginator>
+        </div>
+        <div style="width: 100%;">
+            <table mat-table [dataSource]="dataJsonObject" class="mat-elevation-z8" >
+                <ng-container matColumnDef="column">
+                    <th class="column-uuid" mat-header-cell *matHeaderCellDef> Column </th>
+                    <td mat-cell *matCellDef="let element"> {{element.column}} </td>
+                </ng-container>
+                <ng-container matColumnDef="value">
+                    <th mat-header-cell *matHeaderCellDef> Value </th>
+                    <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+                </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectedRowIndex = row.id"
-            [class.demo-row-is-clicked]="selectedRowIndex == row.id"></tr>
-    </table>
+                <tr mat-header-row *matHeaderRowDef="columnsJsonObject"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsJsonObject;"></tr>
+            </table>
+        </div>
+    </div>
 
-    <mat-paginator showFirstLastButtons [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-        (page)="loadData($event)">
-    </mat-paginator>
+    <!-- <mat-grid-list cols="2" rowHeight="2:2">
+        <mat-grid-tile>
+
+        </mat-grid-tile>
+        <mat-grid-tile>
+
+        </mat-grid-tile>
+    </mat-grid-list> -->
 
 </mat-dialog-content>
