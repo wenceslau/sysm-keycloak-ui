@@ -33,8 +33,8 @@ export class AuthorizerGuard implements CanActivate {
           const element = obj.roles[i];
 
           if (this.auth.hasPermission(element) == false){
-            this.router.navigate(['/access-denied'])
-            return false;
+            //this.router.navigate(['/access-denied'])
+            //return false;
           }
         }
       }
