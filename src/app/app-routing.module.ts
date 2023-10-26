@@ -19,17 +19,17 @@ const routes: Routes = [
   {
     path: 'keycloak/login',
     component: KeycloakLogin,
-    canActivate: [AuthorizerGuard],
+    canActivate: [],
   },
   {
     path: 'keycloak/callback',
     component: CallbackComponent,
-    canActivate: [AuthorizerGuard],
+    canActivate: [],
   },
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [AuthorizerGuard],
+    canActivate: [],
   },
   {
     path: 'access-denied',

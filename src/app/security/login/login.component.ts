@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private auth: AuthorizerService,
+    private authorizer: AuthorizerService,
     private handler: HandlerService,
     private formBuild: FormBuilder) {
 
@@ -29,6 +29,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    if (this.authorizer.authFlow != 'resource') {
+      this.router.navigate(['/keycloak/login'])
+    }
+
   }
 
   formLogin: FormGroup
@@ -40,7 +45,7 @@ export class LoginComponent implements OnInit {
     let user = this.formLogin.value.username
     let pass = this.formLogin.value.password
 
-    this.auth.login(user, pass)
+    this.authorizer.loginResourceFlow(user, pass)
       .then(result => {
         this.router.navigate(['/home'])
       }).catch(err => {

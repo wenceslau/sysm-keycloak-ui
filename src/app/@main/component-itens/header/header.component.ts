@@ -10,21 +10,42 @@ import { AuthorizerService } from 'src/app/security/authorizer.service';
 })
 export class HeaderComponent {
 
-
-  constructor(private router: Router, private handler: HandlerService,
+  constructor(
+    private router: Router, 
+    private handler: HandlerService,
     private authorizer: AuthorizerService) {
   }
 
 
-  reRouter(path: string): void{
+  reRouter(path: string): void {
 
-    this.router.navigate(['/'+path])
+    this.router.navigate(['/' + path])
 
   }
 
-  logout(): void{
+  logout(): void {
 
-    this.authorizer.keycloakLogoutAuthCodeFlow();
+    if (this.authorizer.authFlow == 'resource') {
+      this.handler.loading()
+      this.authorizer.logoutResourceFlow()
+        .then(result => {
+          this.router.navigate(['/login'])
+        }).catch(err => {
+          let errMsg = this.handler.getError(err);
+          if (errMsg == 'invalid_grant' || errMsg == 'unauthorized')
+            errMsg = "User or password invalid"
+          this.handler.addSnackBarError(errMsg);
+        }).finally(() => {
+          this.handler.loading()
+        })
+    } else if (this.authorizer.authFlow == 'authcode') {
+      this.authorizer.logoutAuthCodeFlow();
+
+    } else {
+      this.authorizer.logoutImplictyFlow()
+    }
+
+
 
   }
 

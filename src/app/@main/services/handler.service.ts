@@ -18,7 +18,7 @@ export class HandlerService {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   duration: number = (5 * 1000);
 
-  constructor(private snackBar: MatSnackBar, public auth: AuthorizerService) {
+  constructor(private snackBar: MatSnackBar, private auth: AuthorizerService) {
   }
 
   getError(err: any): string {

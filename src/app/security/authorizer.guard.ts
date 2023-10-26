@@ -25,7 +25,13 @@ export class AuthorizerGuard implements CanActivate {
     console.log('next: ' + router);
     console.log('state: ' + state);
 
+    if (this.auth.isAccessTokenInvalid()){
+      this.router.navigate(['/login'])
+    }
+
+
     if (router.data) {
+
       let obj = JSON.parse(JSON.stringify(router.data));
 
       if (obj && obj.roles) {
