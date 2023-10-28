@@ -7,8 +7,8 @@ import { AuthorizerGuard } from './security/authorizer.guard';
 import { AccessDeniedComponent } from './@main/component-pages/access-denied/access-denied.component';
 import { PermissionComponent } from './account/permission/permission.component';
 import { UserComponent } from './account/user/user.component';
-import { CallbackComponent } from './keycloak/callback/callback.component';
-import { LoginComponent as KeycloakLogin } from './keycloak/login/login.component';
+import { CallbackComponent } from './security/callback/callback.component';
+import { KeycloakComponent } from './security/keycloak/keycloak.component';
 
 const routes: Routes = [
   {
@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'keycloak/login',
-    component: KeycloakLogin,
+    component: KeycloakComponent,
     canActivate: [],
   },
   {

@@ -6,10 +6,10 @@ import { AuthorizerService } from 'src/app/security/authorizer.service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  templateUrl: './keycloak.component.html',
+  styleUrls: ['./keycloak.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class KeycloakComponent implements OnInit {
 
   constructor(
     private handler: HandlerService,
