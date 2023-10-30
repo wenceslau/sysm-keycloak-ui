@@ -3,6 +3,10 @@ import { PermissionComponent } from './permission/permission.component';
 import { UserComponent } from './user/user.component';
 import { MainModule } from '../@main/main.module';
 import { PermissionDialogComponent } from './permission-dialog/permission-dialog.component';
+// import { InputTextModule } from 'primeng/inputtext';
+// import { ButtonModule } from 'primeng/button';
+
+
 
 @NgModule({
   declarations: [
@@ -11,7 +15,14 @@ import { PermissionDialogComponent } from './permission-dialog/permission-dialog
     PermissionDialogComponent,
   ],
   imports: [
-    MainModule
+    MainModule,
+    // InputTextModule,
+    // ButtonModule
+  ],
+  exports: [
+    // InputTextModule,
+    // ButtonModule
   ]
+
 })
 export class AccountModule { }

@@ -30,6 +30,9 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/primeng/resources/themes/mira/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeflex/primeflex.css",
               "@angular/material/prebuilt-themes/deeppurple-amber.css",
               "node_modules/@coreui/icons/css/all.css",
               "src/styles.scss"

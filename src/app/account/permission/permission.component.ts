@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subscriber } from 'rxjs';
-import { AppService, HttpVerb, ServiceParameter } from 'src/app/@main/services/app.service';
+import {AppService, HttpVerb, Service, ServiceParameter} from 'src/app/@main/services/app.service';
 import { PermissionDialogComponent } from '../permission-dialog/permission-dialog.component';
 import { HandlerService } from 'src/app/@main/services/handler.service';
 import { UserActionComponent } from 'src/app/@main/component-itens/user-action/user-action.component';
@@ -99,7 +99,7 @@ export class PermissionComponent implements AfterViewInit {
     }
     parameters.path = "/permissions";
 
-    this.appService.get(parameters, subscriber)
+    this.appService.get(parameters, Service.ACCOUNT,  subscriber)
       .then(result => {
         this.dataSource = new MatTableDataSource<Permission>(result.content);
         this.length = result.totalElements

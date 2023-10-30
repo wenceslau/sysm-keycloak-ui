@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { AppService, ServiceParameter } from '../../services/app.service';
+import {AppService, Service, ServiceParameter} from '../../services/app.service';
 import { HandlerService } from '../../services/handler.service';
 import { Observable, Subscriber } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -72,11 +72,9 @@ export class UserActionComponent implements AfterViewInit {
     parameters.addParameter("objectUuid", this.uuid);
     parameters.addParameter("service", "suite-core");
     parameters.addParameter("objectName", "PermissionModel");
-    parameters.url = "http://localhost:8083"
-
     parameters.path = "/user-action";
 
-    this.appService.get(parameters, subscriber)
+    this.appService.get(parameters, Service.AUDIT, subscriber)
       .then(result => {
         this.dataSource = new MatTableDataSource<UserAction>(result.content);
         this.length = result.totalElements

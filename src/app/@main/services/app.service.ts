@@ -12,19 +12,20 @@ export class ServiceParameter {
   constructor() {
   }
 
-  private _url: string = 'http://localhost:8082';
+  // private _url: string = 'http://localhost:8082';
   private _httpParams: HttpParams = new HttpParams();
+  private _service: Service;
   private _path: string;
   private _object: any;
   private _code: number;
   private _isBlob: Boolean
 
-  get url(): string {
-    return this._url;
+  get service(): Service {
+    return this._service;
   }
 
-  set url(u: string) {
-    this._url = u;
+  set service(s: Service) {
+    this._service = s;
   }
 
   get path(): string {
@@ -59,7 +60,6 @@ export class ServiceParameter {
     this._isBlob = p;
   }
 
-
   get httpParams(): HttpParams {
     return this._httpParams;
   }
@@ -82,14 +82,18 @@ export enum HttpVerb {
   DELETE,
 }
 
+export enum Service {
+  ACCOUNT= "http://localhost:8082",
+  CORE = "http://localhost:9002/core",
+  AUDIT= "http://localhost:9003/audit",
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
 
-  constructor(private http: HttpClient, private handler: HandlerService) {
-
-  }
+  constructor(private http: HttpClient) { }
 
   // async _get(paraeters: ServiceParameter, subscriber?: Subscriber<any>): Promise<any> {
 
@@ -120,26 +124,27 @@ export class AppService {
 
   // }
 
-  get(paraeters: ServiceParameter, subscriber?: Subscriber<any>): Promise<any> {
-    return this.executeHttpRequest(HttpVerb.GET, paraeters, subscriber);
+  get(paraeters: ServiceParameter, service: Service, subscriber?: Subscriber<any>): Promise<any> {
+    return this.executeHttpRequest(HttpVerb.GET, paraeters, service, subscriber);
   }
-  post(paraeters: ServiceParameter, subscriber?: Subscriber<any>): Promise<any> {
-    return this.executeHttpRequest(HttpVerb.POST, paraeters, subscriber);
+  post(paraeters: ServiceParameter, service: Service, subscriber?: Subscriber<any>): Promise<any> {
+    return this.executeHttpRequest(HttpVerb.POST, paraeters, service, subscriber);
   }
-  put(paraeters: ServiceParameter, subscriber?: Subscriber<any>): Promise<any> {
-    return this.executeHttpRequest(HttpVerb.PUT, paraeters, subscriber);
+  put(paraeters: ServiceParameter, service: Service, subscriber?: Subscriber<any>): Promise<any> {
+    return this.executeHttpRequest(HttpVerb.PUT, paraeters, service, subscriber);
   }
-  patch(paraeters: ServiceParameter, subscriber?: Subscriber<any>): Promise<any> {
-    return this.executeHttpRequest(HttpVerb.PATCH, paraeters, subscriber);
+  patch(paraeters: ServiceParameter, service: Service, subscriber?: Subscriber<any>): Promise<any> {
+    return this.executeHttpRequest(HttpVerb.PATCH, paraeters, service, subscriber);
   }
-  delete(paraeters: ServiceParameter, subscriber?: Subscriber<any>): Promise<any> {
-    return this.executeHttpRequest(HttpVerb.DELETE, paraeters, subscriber);
+  delete(paraeters: ServiceParameter, service: Service, subscriber?: Subscriber<any>): Promise<any> {
+    return this.executeHttpRequest(HttpVerb.DELETE, paraeters, service, subscriber);
   }
 
-  private async executeHttpRequest(httoVerb: HttpVerb, parameters: ServiceParameter, subscriber?: Subscriber<any>): Promise<any> {
+  private async executeHttpRequest(httoVerb: HttpVerb, parameters: ServiceParameter, service: Service, subscriber?: Subscriber<any>): Promise<any> {
     console.log('executeHttpRequest1')
     const httpHeader = this.geHeaders();
-    const url = this.getUrlPath(parameters);
+    const url = this.getUrlPath(parameters, service);
+    console.log(url)
     let observable: Observable<any>;
     switch (httoVerb) {
       case HttpVerb.GET:
@@ -174,7 +179,6 @@ export class AppService {
       })
   }
 
-
   private geHeaders() {
     let httpHeader = new HttpHeaders();
     httpHeader = httpHeader
@@ -183,8 +187,8 @@ export class AppService {
     return httpHeader;
   }
 
-  private getUrlPath(pars: ServiceParameter): string {
-    let path = pars.url;
+  private getUrlPath(pars: ServiceParameter, service: Service): string {
+    let path = service.valueOf();
 
     if (pars.path != null)
       path += '' + pars.path;
@@ -194,7 +198,5 @@ export class AppService {
 
     return path;
   }
-
-
 
 }

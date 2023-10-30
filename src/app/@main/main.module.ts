@@ -37,6 +37,11 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { UserActionComponent } from './component-itens/user-action/user-action.component';
 
 
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+
 
 @NgModule({
   declarations: [
@@ -56,7 +61,7 @@ import { UserActionComponent } from './component-itens/user-action/user-action.c
 
     //CoreUi Anguler
     ImgModule,
-    IconModule, 
+    IconModule,
 
     FlexLayoutModule,
 
@@ -77,7 +82,12 @@ import { UserActionComponent } from './component-itens/user-action/user-action.c
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    MatGridListModule
+    MatGridListModule,
+
+    InputTextModule,
+    ButtonModule,
+    TableModule,
+    DialogModule
 
   ],
   exports: [
@@ -93,7 +103,7 @@ import { UserActionComponent } from './component-itens/user-action/user-action.c
 
     //CoreUi Angular
     ImgModule,
-    IconModule, 
+    IconModule,
 
     FlexLayoutModule,
 
@@ -114,7 +124,12 @@ import { UserActionComponent } from './component-itens/user-action/user-action.c
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    MatGridListModule
+    MatGridListModule,
+
+    InputTextModule,
+    ButtonModule,
+    TableModule,
+    DialogModule
 
   ],
   providers: [

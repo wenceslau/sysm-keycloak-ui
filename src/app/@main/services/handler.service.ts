@@ -15,8 +15,8 @@ export class HandlerService {
   isLoadingResults = false;
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
-  duration: number = (5 * 1000);
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  duration: number = (10 * 1000);
 
   constructor(private snackBar: MatSnackBar, private auth: AuthorizerService) {
   }
@@ -49,7 +49,7 @@ export class HandlerService {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
       panelClass: 'main-snackbar-error',
-      duration: this.duration
+      duration: this.duration,
     });
   }
 

@@ -3,7 +3,7 @@
 }
 
 .container {
-  padding-top: 30px;
+  padding-top: 25px;
   padding-right:70px;
   padding-left: 70px;
   background-color: #e3e3e3;
@@ -20,7 +20,7 @@
   bottom: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.15);
-  z-index: 1;
+  z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;

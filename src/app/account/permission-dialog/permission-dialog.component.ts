@@ -3,7 +3,7 @@ import { AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, Subscriber } from 'rxjs';
-import { AppService, HttpVerb, ServiceParameter } from 'src/app/@main/services/app.service';
+import {AppService, HttpVerb, Service, ServiceParameter} from 'src/app/@main/services/app.service';
 import { HandlerService } from 'src/app/@main/services/handler.service';
 
 export interface Permission {
@@ -49,17 +49,17 @@ export class PermissionDialogComponent implements AfterViewInit {
       this.httpInsert();
     }
   }
-  
+
   get editing() {
     return Boolean(this.formInput.value.uuid);
   }
 
-    
+
   get title() {
    if (this.editing){
-    return "Permission - Edit" 
+    return "Permission - Edit"
    }
-   return "Permission - New" 
+   return "Permission - New"
 
   }
 
@@ -68,7 +68,7 @@ export class PermissionDialogComponent implements AfterViewInit {
     const pars = new ServiceParameter();
     pars.path = "/permissions/" + this.uuid;
 
-    this.appService.get(pars, subscriber)
+    this.appService.get(pars, Service.ACCOUNT, subscriber)
       .then(result => {
         this.formInput.patchValue(result);
       }).catch(err => {
@@ -85,7 +85,7 @@ export class PermissionDialogComponent implements AfterViewInit {
     pars.path = "/permissions";
     pars.object = this.formInput.value;
 
-    this.appService.post(pars, subscriber)
+    this.appService.post(pars, Service.ACCOUNT, subscriber)
       .then(result => {
         this.dialogRef.close(this.uuid);
         this.handler.addSnackBarInfo("Record has been saved successfully")
@@ -104,7 +104,7 @@ export class PermissionDialogComponent implements AfterViewInit {
     pars.path = "/permissions/" + this.uuid;
     pars.object = this.formInput.value;
 
-    this.appService.put(pars, subscriber)
+    this.appService.put(pars, Service.ACCOUNT, subscriber)
       .then(result => {
         this.dialogRef.close(this.uuid);
         this.handler.addSnackBarInfo("Record has been saved successfully")
