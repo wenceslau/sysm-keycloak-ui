@@ -3,14 +3,14 @@
 }
 
 .container {
-  padding-top: 25px;
   padding-right:70px;
   padding-left: 70px;
   background-color: #e3e3e3;
   //display: list-item;
   //align-items: center;
   //justify-content: center;
-  height: 85vh;
+  min-height: 85vh;
+  height: 100%;
 }
 
 .loading-shade {

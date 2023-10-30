@@ -41,6 +41,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 
 @NgModule({
@@ -87,7 +88,8 @@ import { DialogModule } from 'primeng/dialog';
     InputTextModule,
     ButtonModule,
     TableModule,
-    DialogModule
+    DialogModule,
+    SpeedDialModule
 
   ],
   exports: [
@@ -129,7 +131,8 @@ import { DialogModule } from 'primeng/dialog';
     InputTextModule,
     ButtonModule,
     TableModule,
-    DialogModule
+    DialogModule,
+    SpeedDialModule
 
   ],
   providers: [

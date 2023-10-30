@@ -1,15 +1,22 @@
 <div class="body-pages">
-      <h2 style="direction: ltr">Application Management</h2>
       <div class="app-filter">
-        <div class="formgrid grid" style="padding: 30px">
+        <div class="grid" >
+          <div class="col">
+            <div class="p-3">
+              <label style="font-family: sans-serif; color: #5E81AC; font-weight: bold">Application Management - Search</label>
+            </div>
+          </div>
+        </div>
+        <div class="formgrid grid" style="padding-inline: 30px; padding-bottom: 30px">
           <div class="field col">
-            <label for="firstname2">Name</label>
-            <input id="firstname2" type="text" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full">
+            <label for="nameFilter">Name</label>
+            <input class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"
+                   id="nameFilter" type="text" [(ngModel)]="valueFilter">
           </div>
           <div class="field"  style="padding-top: 26px">
-            <p-button label="filter" size="small" [rounded]="true" severity="success"></p-button>
+            <p-button label="filter" size="small" severity="success" [rounded]="true" (click)="filter()"></p-button>
             <span style="padding: 2px"></span>
-            <p-button label="Reset" size="small" [rounded]="true" severity="secondary"></p-button>
+            <p-button label="Reset" size="small" severity="secondary" [rounded]="true" (click)="reset()"></p-button>
           </div>
         </div>
       </div>
@@ -18,39 +25,48 @@
         <div class="grid" >
           <div class="col">
             <div class="p-3">
-              <p-button label="New Application" icon="pi pi-plus" [text]="true" (click)="openDialog()"></p-button>
+              <p-button label="New Application" icon="pi pi-plus" [text]="true" (click)="new()"></p-button>
               <p-button label="Import" icon="pi pi-cloud-upload" [text]="true"></p-button>
+              <p-button label="Export" [text]="true"></p-button>
             </div>
           </div>
           <div class="col">
             <div class="p-3" style="direction: rtl">
-              <p-button label="Export" [text]="true"></p-button>
+              <p-button [disabled]="true" [text]="true">{{totalRecords}} rows</p-button>
             </div>
           </div>
         </div>
 
         <!--b r t l-->
         <div style="padding: 20px; margin-top: -40px">
-          <p-table [tableStyle]="{ 'min-width': '50rem' }">
+          <p-table [value]="applications"
+                   [tableStyle]="{ 'min-width': '50rem' }"
+                   [lazy]="true"
+                   (onLazyLoad)="loadData($event)"
+                   [paginator]="true"
+                   [rows]="pageSize"
+                   [totalRecords]="totalRecords"
+                   [loading]="loading"
+                   [(selection)]="selectedValue"
+                   dataKey="uuid">
             <ng-template pTemplate="header">
               <tr>
-                <th>Code</th>
+                <th style="width: 4rem"></th>
                 <th>Name</th>
-                <th>Category</th>
-                <th>Quantity</th>
+                <th>Display Name</th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" >
-              <tr>
-                <td>A</td>
-                <td>B</td>
-                <td>C</td>
-                <td>D</td>
+            <ng-template pTemplate="body" let-application >
+              <tr [pSelectableRow]="application">
+                <td style="width: 4rem">
+                  <p-speedDial direction="right" buttonClassName="p-button-success" [model]="items" (onClick)="onClickSpeedDial(application)" ></p-speedDial>
+                </td>
+                <td>{{application.name}}</td>
+                <td>{{application.displayName}}</td>
               </tr>
             </ng-template>
           </p-table>
         </div>
-
       </div>
 
   <p-dialog header="Header" [(visible)]="visible" position="top" [closable]=false  [style]="{ width: '55vw' }">

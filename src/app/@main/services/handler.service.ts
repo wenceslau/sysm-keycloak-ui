@@ -62,8 +62,9 @@ export class HandlerService {
     });
   }
 
-  loading() {
+  loading(): boolean {
     this.isLoadingResults = !this.isLoadingResults;
+    return this.isLoadingResults;
   }
 
   userNameLogged(): string {

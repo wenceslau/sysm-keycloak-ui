@@ -171,7 +171,7 @@ export class AppService {
     //     return response;
     //   })
 
-    //this way is deprected and will be remove in versions 8 or higher of rxjs
+    //this way is deprecated and will be remove in versions 8 or higher of rxjs
     return observable.toPromise()
       .then(response => {
         console.log('executeHttpRequest2')

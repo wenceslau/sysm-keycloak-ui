@@ -4,7 +4,7 @@
   width: 90%;
   border-radius: 20px;
   border: 0px solid;
-  box-shadow:0px 50px 100px 0px lightgrey;
+  box-shadow:0px 10px 20px 0px #81A1C1;
 }
 
 .app-data{
@@ -13,7 +13,7 @@
   width: 90%;
   border-radius: 20px;
   border: 0px solid;
-  box-shadow:0px 50px 100px 0px lightgrey;
+  box-shadow:0px 10px 20px 0px #81A1C1;
 }
 
 /* Custom Style header and foot dialog */
@@ -23,4 +23,33 @@
 :host ::ng-deep .p-dialog-header{
   justify-content: center;
 }
+
+//Main button SpeedDial
+:host ::ng-deep .p-speeddial-button.p-button.p-button-icon-only {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+//Icon main button SpeedDial
+:host ::ng-deep .p-speeddial-button.p-button.p-button-icon-only .p-icon {
+  width: 1rem;
+}
+
+//Position all SpeedDial
+:host ::ng-deep  .p-speeddial-direction-right {
+  margin-top: -1.25rem;
+}
+
+//Size button actions SpeedDial
+:host ::ng-deep .p-speeddial-action{
+  width: 2rem;
+  height: 2rem;
+}
+
+//Icon button actions SpeedDial
+:host ::ng-deep .p-speeddial-action-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
 
