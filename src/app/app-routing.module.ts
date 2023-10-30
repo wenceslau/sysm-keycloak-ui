@@ -9,6 +9,7 @@ import { PermissionComponent } from './account/permission/permission.component';
 import { UserComponent } from './account/user/user.component';
 import { CallbackComponent } from './security/callback/callback.component';
 import { KeycloakComponent } from './security/keycloak/keycloak.component';
+import { ApplicationComponent } from './core/application/application.component';
 
 const routes: Routes = [
   {
@@ -53,6 +54,18 @@ const routes: Routes = [
     component: UserComponent,
     canActivate: [AuthorizerGuard],
     data: { roles: ['ROLE_VIEW_USER', 'ROLE_CREATE_USER'] }
+  },
+  {
+    path: 'application',
+    component: ApplicationComponent,
+    canActivate: [AuthorizerGuard],
+    data: { roles: [] }
+  },
+  {
+    path: 'business-unit',
+    component: ApplicationComponent,
+    canActivate: [AuthorizerGuard],
+    data: { roles: [] }
   }
 ];
 

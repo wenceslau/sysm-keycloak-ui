@@ -1,4 +1,4 @@
-<div class="header-body">
+<div>
     <mat-toolbar color="primary">
         <span class="sml-spacer"></span>
         <!-- <img cImg align="start" [rounded]="true" src="assets/security.jpg" width="80" /> -->
@@ -9,10 +9,18 @@
             <mat-icon aria-hidden="false" fontIcon="home"></mat-icon>
             Home
         </button>
+        <button mat-button [matMenuTriggerFor]="core">
+            <mat-icon>settings</mat-icon>
+            Core
+        </button>
         <button mat-button [matMenuTriggerFor]="account">
             <mat-icon>account_box</mat-icon>
             Account
         </button>
+        <mat-menu #core="matMenu">
+            <button mat-menu-item (click)="reRouter('application')">Applications</button>
+            <button mat-menu-item (click)="reRouter('business-unit')">Business Unit</button>
+        </mat-menu>
         <mat-menu #account="matMenu">
             <button mat-menu-item (click)="reRouter('permission')">Permissions</button>
             <button mat-menu-item (click)="reRouter('user')">Users</button>
@@ -22,7 +30,7 @@
             Log Out
         </button>
         <span class="big-spacer"></span>
-        <span>Welcome:</span>
+        <span>Welcome: </span>
         <span class="min-spacer"></span>
         <span>{{userNameLooged()}}</span>
 

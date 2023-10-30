@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { freeSet } from '@coreui/icons';
-
 
 @Component({
   selector: 'app-user',
@@ -8,6 +6,5 @@ import { freeSet } from '@coreui/icons';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent {
-  icons = freeSet ;
 
 }

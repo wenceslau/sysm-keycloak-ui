@@ -67,8 +67,8 @@ export class HandlerService {
   }
 
   userNameLogged(): string {
-    if (this.auth && this.auth.jwtPayload) {
-      return this.auth.jwtPayload.user_name;
+    if (this.auth.jwtPayload) {
+      return this.auth.jwtPayload.preferred_username;
     }
     return ''
   }

@@ -221,7 +221,7 @@ export class AuthorizerService {
   private loadToken() {
     const token = localStorage.getItem('token');
     if (token)
-      this.store(token, 'token');
+      this.storeToken(token, 'token');
   }
 
   private remove(name: string) {

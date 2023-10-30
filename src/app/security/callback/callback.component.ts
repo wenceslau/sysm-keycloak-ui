@@ -21,7 +21,7 @@ export class CallbackComponent implements OnInit, AfterViewInit {
     console.log('ngAfterViewInit')
 
     if (this.authorizer.authFlow == 'authcode') {
-      //AuthCodeFlow
+      
       this.activatedRoute.queryParams.subscribe(params => {
         let authCode = params['code'];
         console.log(params)
