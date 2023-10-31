@@ -35,37 +35,36 @@ const routes: Routes = [
   {
     path: 'access-denied',
     component: AccessDeniedComponent,
-    canActivate: [AuthorizerGuard],
+    canActivate: [],
   },
   {
     path: 'home',
     component: HomeComponent,
     canActivate: [AuthorizerGuard],
-    data: { roles: ['ROLE_VIEW_USER', 'ROLE_CREATE_USER'] }
   },
   {
     path: 'permission',
     component: PermissionComponent,
     canActivate: [AuthorizerGuard],
-    data: { roles: ['ROLE_VIEW_PERMISSION', 'ROLE_CREATE_PERMISSION'] }
+    data: { roles: ['sacc-permission-viewer'] }
   },
   {
     path: 'user',
     component: UserComponent,
     canActivate: [AuthorizerGuard],
-    data: { roles: ['ROLE_VIEW_USER', 'ROLE_CREATE_USER'] }
+    data: { roles: ['sacc-user-viewer'] }
   },
   {
     path: 'application',
     component: ApplicationComponent,
     canActivate: [AuthorizerGuard],
-    data: { roles: [] }
+    data: { roles: ['scre-application-viewer'] }
   },
   {
     path: 'business-unit',
     component: ApplicationComponent,
     canActivate: [AuthorizerGuard],
-    data: { roles: [] }
+    data: { roles: ['scre-application-viewer'] }
   }
 ];
 

@@ -11,7 +11,7 @@ import { AuthorizerService } from 'src/app/security/authorizer.service';
 export class HeaderComponent {
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private handler: HandlerService,
     private authorizer: AuthorizerService) {
   }
@@ -50,7 +50,7 @@ export class HeaderComponent {
   }
 
   userNameLooged(): string {
-    return this.handler.userNameLogged();
+    return this.handler.nameLogged();
   }
 
 }

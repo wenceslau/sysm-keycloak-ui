@@ -67,9 +67,16 @@ export class HandlerService {
     return this.isLoadingResults;
   }
 
-  userNameLogged(): string {
+  usernameLogged(): string {
     if (this.auth.jwtPayload) {
       return this.auth.jwtPayload.preferred_username;
+    }
+    return ''
+  }
+
+  nameLogged(): string {
+    if (this.auth.jwtPayload) {
+      return this.auth.jwtPayload.name;
     }
     return ''
   }

@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, lastValueFrom, throwError } from 'rxjs';
+import { Observable, lastValueFrom } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
-
 
 @Injectable({
   providedIn: 'root'
@@ -14,47 +13,12 @@ export class AuthorizerService {
   //authcode, implicit, hybrid, resource
   authFlow: string = 'authcode'
   clientId: string = 'wban-client'
-  jwtPayload: any;        // Armazena o json do token, o payload
+  jwtPayload: any;
 
-  constructor(
-    private http: HttpClient,
-    private jwtHelperService: JwtHelperService,
-    private cookieService: CookieService) {
+  constructor(private http: HttpClient,
+              private jwtHelperService: JwtHelperService,
+              private cookieService: CookieService) {
     this.loadToken();
-  }
-
-  async login(email: string, password: string): Promise<any> {
-    this.clearToken();
-
-    let oauthTokenUrl = 'http://localhost:8081/oauth/token'
-    let headers = new HttpHeaders();
-
-    // enviado como post, preciso do content typ para ler o body como um query string
-    headers = headers
-      .append('Content-Type', 'application/x-www-form-urlencoded')
-      .append('Authorization', 'Basic d2ViOkB3ZWIxMjM=');
-
-    const body = `username=${email}&password=${password}&grant_type=password`;
-
-    let observable: Observable<any>;
-    observable = this.http.post<any>(oauthTokenUrl, body, { headers, withCredentials: true })
-    const source$ = observable.pipe();
-
-    return await lastValueFrom(source$)
-      .then(response => {
-        this.storeToken(response.access_token, 'token');
-        return response;
-      })
-    // return this.http.post<any>(this.oauthTokenUrl, body, { headers, withCredentials: true })
-    //   .pipe(
-    //     retry(1),
-    //     map(resp => {
-    //       this.storeToken(resp.access_token);
-    //       return resp.access_token;
-    //     }),
-    //     catchError(err =>
-    //       this.handleError(err)
-    //     ))
   }
 
   //Flow Authorization code, get the token by authorization code
@@ -86,7 +50,7 @@ export class AuthorizerService {
 
   //Flow Authorization code, get the token by authorization code
   async loginAuthCodeFlow(authCode: string): Promise<any> {
-    
+
     const loginParams = new URLSearchParams({
       client_id: this.clientId,
       grant_type: 'authorization_code',
@@ -109,7 +73,6 @@ export class AuthorizerService {
       });
   }
 
-  //Flow Authorization code, get the token by authorization code
   async logoutResourceFlow() {
     console.log('logoutResourceFlow')
     const oauthUrl = 'http://localhost:8080/realms/master/protocol/openid-connect/revoke';
@@ -139,7 +102,6 @@ export class AuthorizerService {
     });
   }
 
-  //Flow Authorization code, get the token by authorization code
   async logoutAuthCodeFlow() {
     console.log('logoutAuthCodeFlow')
 
@@ -173,21 +135,19 @@ export class AuthorizerService {
     document.location.href = url;
   }
 
-  // Verifica se a permissao contem nos authorities do toekn
   hasPermission(permission: string) {
-    if (this.jwtPayload && this.jwtPayload.authorities)
-      return this.jwtPayload.authorities.includes(permission);
+    if (this.jwtPayload && this.jwtPayload.realm_access) {
+      let obj = this.jwtPayload.realm_access;
+      return obj.roles.includes(permission);
+    }
     return false;
   }
 
-  // Verifica se o token e valido
   isAccessTokenInvalid() {
     const token = this.retrieve('token');
-    console.log('isAccessTokenInvalid')
     return !token || this.jwtHelperService.isTokenExpired(token);
   }
 
-  // Remove o token do local storage
   clearToken() {
     this.remove('token');
     this.remove('idtoken');
@@ -195,9 +155,7 @@ export class AuthorizerService {
     this.jwtPayload = null;
   }
 
-  // Armazena o token no storage local e decodifica ele no jwtPayload
-  public storeToken(value: any, name: string) {
-    console.log(value)
+  storeToken(value: any, name: string) {
     if (value){
       this.jwtPayload = this.jwtHelperService.decodeToken(value);
       console.log('jwtPayload: ' + JSON.stringify(this.jwtPayload))
@@ -205,19 +163,16 @@ export class AuthorizerService {
     this.store(value, name);
   }
 
-  public store(value: any, name: string) {
-    console.log(value)
+  store(value: any, name: string) {
     localStorage.setItem(name, value);
-    //document.cookie = name+"="+ value
     //this.cookieService.set(name, value);
   }
 
-  public retrieve(name: string): string {
+  retrieve(name: string): string {
     return localStorage.getItem(name) as string;
    // return this.cookieService.get(name);
   }
 
-  //Carrega o token do storage local
   private loadToken() {
     const token = localStorage.getItem('token');
     if (token)
@@ -226,7 +181,7 @@ export class AuthorizerService {
 
   private remove(name: string) {
     localStorage.removeItem(name);
-    this.cookieService.delete(name)
+    //this.cookieService.delete(name)
   }
 
   private post(body: string, oauthUrl: string): Observable<any> {
@@ -239,6 +194,41 @@ export class AuthorizerService {
     observable = this.http.post<any>(oauthUrl, body, { headers, withCredentials: true });
 
     return observable.pipe();
+  }
+
+  //Deprected
+  private async login(email: string, password: string): Promise<any> {
+    this.clearToken();
+
+    let oauthTokenUrl = 'http://localhost:8081/oauth/token'
+    let headers = new HttpHeaders();
+
+    // enviado como post, preciso do content typ para ler o body como um query string
+    headers = headers
+      .append('Content-Type', 'application/x-www-form-urlencoded')
+      .append('Authorization', 'Basic d2ViOkB3ZWIxMjM=');
+
+    const body = `username=${email}&password=${password}&grant_type=password`;
+
+    let observable: Observable<any>;
+    observable = this.http.post<any>(oauthTokenUrl, body, { headers, withCredentials: true })
+    const source$ = observable.pipe();
+
+    return await lastValueFrom(source$)
+      .then(response => {
+        this.storeToken(response.access_token, 'token');
+        return response;
+      })
+    // return this.http.post<any>(this.oauthTokenUrl, body, { headers, withCredentials: true })
+    //   .pipe(
+    //     retry(1),
+    //     map(resp => {
+    //       this.storeToken(resp.access_token);
+    //       return resp.access_token;
+    //     }),
+    //     catchError(err =>
+    //       this.handleError(err)
+    //     ))
   }
 
 }
