@@ -21,7 +21,7 @@ export class CallbackComponent implements OnInit, AfterViewInit {
     console.log('ngAfterViewInit')
 
     if (this.authorizer.authFlow == 'authcode') {
-      
+
       this.activatedRoute.queryParams.subscribe(params => {
         let authCode = params['code'];
         console.log(params)
@@ -29,12 +29,14 @@ export class CallbackComponent implements OnInit, AfterViewInit {
           .then(result => {
             this.router.navigate(['/home'])
           }).catch(err => {
+            console.error(err)
             alert(JSON.stringify(err))
+            this.router.navigate(['/login'])
           })
       });
 
     } else if (this.authorizer.authFlow == 'implicit') {
-     
+
         this.activatedRoute.fragment.subscribe(fragments => {
         //Validate if nonce received here is the same that was send in request auth code
         //validate state to avoid CSRF atack

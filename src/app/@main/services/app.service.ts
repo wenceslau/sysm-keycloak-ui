@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subscriber, lastValueFrom, throwError } from 'rxjs';
-import { retry, catchError, map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 
 import { HandlerService } from './handler.service';
@@ -83,9 +83,9 @@ export enum HttpVerb {
 }
 
 export enum Service {
-  ACCOUNT= "http://localhost:8082",
-  CORE = "http://localhost:9002/core",
-  AUDIT= "http://localhost:9003/audit",
+  ACCOUNT,
+  CORE ,
+  AUDIT
 }
 
 @Injectable({
@@ -93,7 +93,9 @@ export enum Service {
 })
 export class AppService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    console.log(environment.production)
+  }
 
   // async _get(paraeters: ServiceParameter, subscriber?: Subscriber<any>): Promise<any> {
 
@@ -188,7 +190,18 @@ export class AppService {
   }
 
   private getUrlPath(pars: ServiceParameter, service: Service): string {
-    let path = service.valueOf();
+    let path = ''
+    switch (service) {
+      case Service.CORE:
+        path = environment.core;
+        break;
+      case Service.ACCOUNT:
+        path = environment.account;
+        break;
+      case Service.AUDIT:
+        path = environment.audit;
+        break;
+    }
 
     if (pars.path != null)
       path += '' + pars.path;

@@ -5,6 +5,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, lastValueFrom } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 
+import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,8 +14,12 @@ export class AuthorizerService {
 
   //authcode, implicit, hybrid, resource
   authFlow: string = 'authcode'
-  clientId: string = 'wban-client'
+  clientId: string = 'sysm-client'
   jwtPayload: any;
+
+  keycloak: string = environment.keycloak; //'http://keycloak:18080/realms/master'
+  callback: string = environment.callback; //'http://localhost:4200/keycloak/callback'
+  login: string = environment.login; //'http://localhost:4200/keycloak/login'
 
   constructor(private http: HttpClient,
               private jwtHelperService: JwtHelperService,
@@ -21,7 +27,35 @@ export class AuthorizerService {
     this.loadToken();
   }
 
-  //Flow Authorization code, get the token by authorization code
+  redirectAuthCodeFlow(nonce: string, state: string) {
+    const loginParams = new URLSearchParams({
+      client_id: this.clientId,
+      redirect_uri: this.callback,
+      response_type: "code",
+      scope: "openid",
+      //keycloak is already prepared to receive nonce and state, and send back within token and on url parameter
+      nonce,
+      state
+    });
+
+    const url = `${this.keycloak}/protocol/openid-connect/auth?${loginParams.toString()}`;
+    document.location.href = url;
+  }
+
+  redirectImplicitFlow(nonce: string, state: string) {
+    const loginParams = new URLSearchParams({
+      client_id: this.clientId,
+      redirect_uri: this.callback,
+      response_type: "token id_token",
+      //keycloak is already prepared to receive nonce and state, and send back within token and on url parameter
+      nonce,
+      state
+    });
+
+    const url = `${this.keycloak}/protocol/openid-connect/auth?${loginParams.toString()}`;
+    document.location.href = url;
+  }
+
   async loginResourceFlow(username: string, password: string): Promise<any> {
 
     const loginParams = new URLSearchParams({
@@ -33,7 +67,7 @@ export class AuthorizerService {
     });
 
     const body = loginParams.toString();
-    const oauthUrl = 'http://localhost:8080/realms/master/protocol/openid-connect/token';
+    const oauthUrl = `${this.keycloak}/protocol/openid-connect/token`;
 
     let source$ = this.post(body, oauthUrl);
 
@@ -48,18 +82,17 @@ export class AuthorizerService {
       });
   }
 
-  //Flow Authorization code, get the token by authorization code
   async loginAuthCodeFlow(authCode: string): Promise<any> {
 
     const loginParams = new URLSearchParams({
       client_id: this.clientId,
       grant_type: 'authorization_code',
-      redirect_uri: "http://localhost:4200/keycloak/callback",
+      redirect_uri: this.callback,
       code: authCode
     });
 
     const body = loginParams.toString();
-    const oauthUrl = 'http://localhost:8080/realms/master/protocol/openid-connect/token';
+    const oauthUrl = `${this.keycloak}/protocol/openid-connect/token`;
 
     let source$ = this.post(body, oauthUrl);
     return await lastValueFrom(source$)
@@ -69,13 +102,14 @@ export class AuthorizerService {
         this.storeToken(value.access_token, 'token');
         this.store(value.id_token, 'idtoken');
         this.store(value.refresh_token, 'refreshtoken');
+        //alert('ID:...'+value.id_token)
         return response;
       });
   }
 
   async logoutResourceFlow() {
     console.log('logoutResourceFlow')
-    const oauthUrl = 'http://localhost:8080/realms/master/protocol/openid-connect/revoke';
+    const oauthUrl = `${this.keycloak}/protocol/openid-connect/revoke`;
 
     let token = this.retrieve('token');
     let loginParams = new URLSearchParams({
@@ -108,28 +142,28 @@ export class AuthorizerService {
     let id_token = this.retrieve('idtoken') as string
     //alert('ID:...'+id_token)
     const logoutParams = new URLSearchParams({
-      client_id: "wban-client", // if  I send this value, keycloak will ask user to confirm logout
+      client_id: this.clientId, // if  I send this value, keycloak will ask user to confirm logout
       id_token_hint: id_token,
-      post_logout_redirect_uri: "http://localhost:4200/keycloak/login"
+      post_logout_redirect_uri: this.login
     });
 
-    const url = `http://localhost:8080/realms/master/protocol/openid-connect/logout?${logoutParams.toString()}`;
+    const url = `${this.keycloak}/protocol/openid-connect/logout?${logoutParams.toString()}`;
 
     this.clearToken();
     document.location.href = url;
   }
 
-  async logoutImplictyFlow() {
+  async logoutImplicitFlow() {
     console.log('logoutAuthImplicty')
 
     let id_token = this.retrieve('idtoken') as string
     const logoutParams = new URLSearchParams({
-      client_id: "wban-client", // if  I send this value, keycloak will ask user to confirm logout
+      client_id: this.clientId, // if  I send this value, keycloak will ask user to confirm logout
       id_token_hint: id_token,
-      post_logout_redirect_uri: "http://localhost:4200/keycloak/login"
+      post_logout_redirect_uri: this.login
     });
 
-    const url = `http://localhost:8080/realms/master/protocol/openid-connect/logout?${logoutParams.toString()}`;
+    const url = `${this.keycloak}/protocol/openid-connect/logout?${logoutParams.toString()}`;
 
     this.clearToken();
     document.location.href = url;
@@ -197,7 +231,7 @@ export class AuthorizerService {
   }
 
   //Deprected
-  private async login(email: string, password: string): Promise<any> {
+  private async _login(email: string, password: string): Promise<any> {
     this.clearToken();
 
     let oauthTokenUrl = 'http://localhost:8081/oauth/token'

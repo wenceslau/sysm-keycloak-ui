@@ -42,7 +42,7 @@ export class HeaderComponent {
       this.authorizer.logoutAuthCodeFlow();
 
     } else {
-      this.authorizer.logoutImplictyFlow()
+      this.authorizer.logoutImplicitFlow()
     }
 
 
