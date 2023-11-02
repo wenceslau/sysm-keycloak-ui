@@ -15,21 +15,19 @@ export class HandlerService {
   isLoadingResults = false;
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
   duration: number = (10 * 1000);
 
   constructor(private snackBar: MatSnackBar, private auth: AuthorizerService) {
   }
 
   getError(err: any): string {
-    console.log(err)
+    console.log('Error...: ' + err)
+    console.error('Error...: ' + err)
+    console.log('Error...' +JSON.stringify(err))
     let errorMessage;
 
-    errorMessage = err?.error?.exception
-    if (errorMessage)
-      return err?.error?.message;
-
-    errorMessage = err?.error?.error;
+    errorMessage = err?.error?.message;
     if (errorMessage)
       return errorMessage;
 
@@ -37,11 +35,16 @@ export class HandlerService {
     if (errorMessage)
       return errorMessage;
 
+    if (errorMessage == 'invalid_grant' || errorMessage == 'unauthorized')
+      errorMessage = "User or password invalid"
+
     return JSON.stringify(err);
   }
 
-  throwError(err: any) {
-    this.addSnackBarError(this.getError(err))
+  throwError(err: any): string {
+    let errorMsg = this.getError(err)
+    this.addSnackBarError(errorMsg)
+    return err;
   }
 
   addSnackBarError(message: string) {

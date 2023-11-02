@@ -1,0 +1,40 @@
+# The network must be created if not exist
+#   docker network create --driver bridge wncslnet
+
+# Common Command
+#   docker compose -f .\docker-compose-apps.yaml --profile prod up -d --build
+#   docker compose -f .\docker-compose-apps.yaml --profile prod down
+
+version: '3.9'
+name: suite-services-prod
+
+networks:
+    wncslnet:
+        external: true
+        driver: bridge
+
+services:
+    suite-ui:
+        #profiles:
+        #    - prod
+        build:
+            context: ./
+        image: 'wenceslau/suite-ui:latest'
+        container_name: suite-ui
+        #volumes:
+         #   - ./data/nginx:/etc/nginx
+        deploy:
+            mode: replicated
+            replicas: 1
+        #restart: on-failure
+        networks:
+            - wncslnet
+        ports:
+            - '8888:80'
+
+# docker compose up -d              = Execute docker compose without terminal
+# docker compose down               = Stop all the containers from the file
+# docker compose up -d --build      = Rebuild all the images and up the containers
+# docker compose ps                 = List all containers from compose
+# docker compose --profile prod up -d
+# docker compose --profile prod down

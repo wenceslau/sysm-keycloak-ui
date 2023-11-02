@@ -59,5 +59,9 @@ body {
   width: 50px;
 }
 
+.cdk-overlay-container {
+  position: fixed;
+  z-index: 100001;
+}
 
 

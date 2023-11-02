@@ -1,7 +1,8 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subscriber, lastValueFrom, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import {catchError} from 'rxjs/operators'
 
 
 import { HandlerService } from './handler.service';
@@ -166,19 +167,20 @@ export class AppService {
         break;
     }
 
+
     //New way to use rxjs
-    // const source$ = observable.pipe();
-    // return await lastValueFrom(source$)
-    //   .then(response => {
-    //     return response;
-    //   })
+    const source$ = observable.pipe();
+    return await lastValueFrom(source$)
+      .then(response => {
+        return response;
+      });
 
     //this way is deprecated and will be remove in versions 8 or higher of rxjs
-    return observable.toPromise()
-      .then(response => {
-        console.log('executeHttpRequest2')
-        return response;
-      })
+    // return observable.toPromise()
+    //   .then(response => {
+    //     console.log('executeHttpRequest2')
+    //     return response;
+    //   })
   }
 
   private geHeaders() {

@@ -30,16 +30,15 @@ export class HeaderComponent {
       this.authorizer.logoutResourceFlow()
         .then(result => {
           this.router.navigate(['/login'])
+
         }).catch(err => {
-          let errMsg = this.handler.getError(err);
-          if (errMsg == 'invalid_grant' || errMsg == 'unauthorized')
-            errMsg = "User or password invalid"
-          this.handler.addSnackBarError(errMsg);
+          this.handler.throwError(err)
+
         }).finally(() => {
           this.handler.loading()
         })
     } else if (this.authorizer.authFlow == 'authcode') {
-      this.authorizer.logoutAuthCodeFlow();
+      this.authorizer.logoutAuthCodeFlow()
 
     } else {
       this.authorizer.logoutImplicitFlow()

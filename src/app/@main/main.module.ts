@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JwtHelperService, JWT_OPTIONS } from '@auth0/angular-jwt';
 
@@ -42,6 +42,7 @@ import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { SpeedDialModule } from 'primeng/speeddial';
+import {InterceptorService} from "./services/interceptor.service";
 
 
 @NgModule({
@@ -136,9 +137,11 @@ import { SpeedDialModule } from 'primeng/speeddial';
 
   ],
   providers: [
-    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS },
+    { provide: JWT_OPTIONS, useValue: JWT_OPTIONS, },
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true },
     JwtHelperService,
-    IconSetService
+    IconSetService,
+
   ]
 })
 export class MainModule { }

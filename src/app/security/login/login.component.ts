@@ -48,12 +48,11 @@ export class LoginComponent implements OnInit {
     this.authorizer.loginResourceFlow(user, pass)
       .then(result => {
         this.router.navigate(['/home'])
+
       }).catch(err => {
-        let errMsg = this.handler.getError(err);
-        if (errMsg == 'invalid_grant' || errMsg == 'unauthorized')
-          errMsg = "User or password invalid"
-        this.handler.addSnackBarError(errMsg);
+        let errMsg = this.handler.throwError(err)
         this.error = errMsg
+
       }).finally(() => {
         this.handler.loading()
       })

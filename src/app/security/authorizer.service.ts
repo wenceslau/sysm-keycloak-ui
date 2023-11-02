@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt'
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 
 import { Observable, lastValueFrom } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
@@ -79,7 +79,7 @@ export class AuthorizerService {
         this.store(value.id_token, 'idtoken');
         this.store(value.refresh_token, 'refreshtoken');
         return response;
-      });
+      })
   }
 
   async loginAuthCodeFlow(authCode: string): Promise<any> {
@@ -227,7 +227,9 @@ export class AuthorizerService {
     let observable: Observable<any>;
     observable = this.http.post<any>(oauthUrl, body, { headers, withCredentials: true });
 
-    return observable.pipe();
+
+
+    return observable.pipe()
   }
 
   //Deprected

@@ -26,6 +26,7 @@ export class AuthorizerGuard implements CanActivate {
     console.log('state: ' + state);
 
     if (this.auth.isAccessTokenInvalid()){
+     // alert('invalid token')
       this.router.navigate(['/login'])
     }
 
@@ -35,12 +36,14 @@ export class AuthorizerGuard implements CanActivate {
       if (obj && obj.roles) {
         for (let i = 0; i < obj.roles.length; i++) {
           if (this.auth.hasPermission(obj.roles[i]) == false){
+            //alert('denied')
             this.router.navigate(['/access-denied'])
             return false;
           }
         }
       }
     }
+    //alert('true')
     return true;
   }
 }
