@@ -4,6 +4,8 @@ import {HandlerService} from "../../@main/services/handler.service";
 import {Observable, Subscriber} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LazyLoadEvent, MenuItem} from "primeng/api";
+import {MatDialog} from "@angular/material/dialog";
+import {UserActionComponent} from "../../@main/component-itens/user-action/user-action.component";
 
 @Component({
   selector: 'app-application',
@@ -28,7 +30,8 @@ export class ApplicationComponent {
   constructor(
     private formBuild: FormBuilder,
     private appService: AppService,
-    public handler: HandlerService
+    public handler: HandlerService,
+    public dialog: MatDialog,
   ) {
     this.formInput = this.formBuild.group({
       uuid: [null],
@@ -51,7 +54,7 @@ export class ApplicationComponent {
       {
         icon: 'pi pi-upload',
         command: () => {
-          this.edit();
+          this.userAction();
         }
       },
     ];
@@ -82,6 +85,14 @@ export class ApplicationComponent {
     } else {
       this.httpInsert();
     }
+  }
+
+  userAction() {
+
+    const dialogRef = this.dialog.open(UserActionComponent, {
+      data: this.selectedValue.uuid,
+      width: '70%',
+    });
   }
 
   onClickSpeedDial(value: any ){

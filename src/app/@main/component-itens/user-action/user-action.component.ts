@@ -69,10 +69,10 @@ export class UserActionComponent implements AfterViewInit {
     const parameters = new ServiceParameter();
     parameters.addParameter("page", pageIndex);
     parameters.addParameter("size", pageSize);
+    parameters.addParameter("service", "service-core");
+    parameters.addParameter("objectName", "ApplicationModel");
     parameters.addParameter("objectUuid", this.uuid);
-    parameters.addParameter("service", "suite-core");
-    parameters.addParameter("objectName", "PermissionModel");
-    parameters.path = "/user-action";
+    parameters.path = "/user-actions";
 
     this.appService.get(parameters, Service.AUDIT, subscriber)
       .then(result => {

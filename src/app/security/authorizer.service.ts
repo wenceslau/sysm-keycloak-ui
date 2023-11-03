@@ -13,8 +13,8 @@ import { environment } from '../../environments/environment';
 export class AuthorizerService {
 
   //authcode, implicit, hybrid, resource
-  authFlow: string = 'authcode'
-  clientId: string = 'sysm-client'
+  authFlow: string = environment.authFlow
+  clientId: string = environment.clientId
   jwtPayload: any;
 
   keycloak: string = environment.keycloak; //'http://keycloak:18080/realms/master'
